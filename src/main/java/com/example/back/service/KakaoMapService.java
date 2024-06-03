@@ -4,6 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface KakapMapService {
-    ResponseEntity<String> searchPlace(String query, double lat, double lng, int radius);
+public interface KakaoMapService {
+    ResponseEntity<String> searchPlace(double lat, double lng, String query);
 }

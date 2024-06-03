@@ -1,42 +1,35 @@
 package com.example.back.service.implement;
 
 
-import com.example.back.service.KakapMapService;
+import com.example.back.service.KakaoMapService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoMapServiceImplement implements KakapMapService {
+public class KakaoMapServiceImplement implements KakaoMapService {
 
-    @Value("${naver.map.client.id}")
-    private String clientId;
-    @Value("${naver.map.client.secret}")
-    private String clientSecret;
+//    @Value("${kakao.api.key}")
+    private String apiKey = "d0630e67d7487ad8a58bae7c65823e88";
 
-    public ResponseEntity<String> searchPlace(String query, double lat, double lng, int radius) {
-        String url = "https://openapi.naver.com/v1/search/local.json";
+    private final RestTemplate restTemplate;
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("query", query)
-                .queryParam("display", 5)
-                .queryParam("start", 56)
-                .queryParam("sort", "random");
-//                .queryParam("latitude", lat)
-//                .queryParam("longitude", lng)
-//                .queryParam("radius", radius);
+    @Override
+    public ResponseEntity<String> searchPlace(double lat, double lng, String query) {
+        String url = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + query + "&x=" + lng + "&y=" + lat + "&radius=5000";
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Naver-Client-Id", clientId);
-        headers.set("X-Naver-Client-Secret", clientSecret);
+        headers.set("Authorization", "KakaoAK " + apiKey);
+        headers.set("KA", "sdk/1.0.0");
+        headers.set("os", "javascript");
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+
+        return restTemplate.exchange(url, org.springframework.http.HttpMethod.GET, entity, String.class);
     }
 }
 
