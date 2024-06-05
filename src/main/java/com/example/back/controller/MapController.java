@@ -1,6 +1,5 @@
 package com.example.back.controller;
 
-
 import com.example.back.service.KakaoMapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,8 @@ public class MapController {
     private final KakaoMapService kakaoMapService;
 
     @GetMapping("/search")
-    public ResponseEntity<String> searchPlaces(@RequestParam double lat, @RequestParam double lng, @RequestParam String query) {
-        return kakaoMapService.searchPlace(lat, lng, query);
+    public String searchPlaces(@RequestParam double lat, @RequestParam double lng, @RequestParam String query) {
+        ResponseEntity<String> response = kakaoMapService.searchPlace(lat, lng, query);
+        return response.getBody();
     }
 }
