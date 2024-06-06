@@ -41,18 +41,18 @@ public class ProductServiceImplement implements ProductService {
 
         ResponseEntity<NaverResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, NaverResponse.class);
         NaverResponse naverResponse = responseEntity.getBody();
-        System.out.println(naverResponse);
+        System.out.println(responseEntity.getBody());
         if (naverResponse != null && naverResponse.getItems() != null) {
             List<ProductEntity> productEntities = naverResponse.getItems().stream().map(item -> {
                 ProductEntity product = new ProductEntity();
-                product.setProductId(Long.parseLong(item.getProductId()));
+                product.setProductId(item.getProductId());
                 product.setTitle(removeHtmlTags(item.getTitle()));
                 product.setLink(item.getLink());
                 product.setImage(item.getImage());
                 product.setLowPrice(item.getLprice());
-                product.setCount(1);
-                product.setCategory1("category1");
-                product.setCategory2("category2");
+                product.setCount(item.getCount());
+                product.setCategory1(item.getCategory1());
+                product.setCategory2(item.getCategory2());
 
                 Optional<ProductEntity> existingProduct = productRepository.findByTitle(product.getTitle());
                 if (existingProduct.isPresent()) {
@@ -83,11 +83,14 @@ public class ProductServiceImplement implements ProductService {
     @Getter
     @Setter
     private static class Item {
+        private Long productId;
         private String title;
         private String link;
         private String image;
         private String lprice;
-        private String productId;
+        private int count;
+        private String category1;
+        private String category2;
     }
 
     private String removeHtmlTags(String html) {
