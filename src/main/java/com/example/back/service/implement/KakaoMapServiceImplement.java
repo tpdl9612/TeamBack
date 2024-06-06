@@ -26,12 +26,6 @@ public class KakaoMapServiceImplement implements KakaoMapService {
         headers.set("Authorization", "KakaoAK " + apiKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        try {
-            ResponseEntity<String> test = restTemplate.exchange(url, org.springframework.http.HttpMethod.GET, entity, String.class);
-            System.out.println(test);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return restTemplate.exchange(url, org.springframework.http.HttpMethod.GET, entity, String.class);
     }
 }

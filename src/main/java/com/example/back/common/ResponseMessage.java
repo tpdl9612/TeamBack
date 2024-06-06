@@ -21,4 +21,6 @@ public interface ResponseMessage {
 
     String WRONG_PASSWORD = "Wrong Password";
     String DO_NOT_HAVE_PERMISSION = "Do Not Have Permission";
+
+    String DUPLICATED_TITLE = "Duplicate Title";
 }

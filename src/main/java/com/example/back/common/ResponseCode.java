@@ -22,4 +22,6 @@ public interface ResponseCode {
 
     String WRONG_PASSWORD = "WP";
     String DO_NOT_HAVE_PERMISSION = "NP";
+
+    String DUPLICATED_TITLE = "DT";
 }

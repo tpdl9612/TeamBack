@@ -52,6 +52,8 @@ dependencies {
 	implementation 'org.springframework:spring-websocket:6.1.7'
 	implementation 'com.google.zxing:core:3.4.1'
 	implementation 'com.google.zxing:javase:3.4.1'
+	implementation 'org.jsoup:jsoup:1.17.2'
+
 }
 
 tasks.named('test') {
