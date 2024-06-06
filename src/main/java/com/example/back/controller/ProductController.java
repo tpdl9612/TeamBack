@@ -16,7 +16,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/save")
+    @GetMapping("/search")
     public ResponseEntity<? super SaveProductResponseDto> saveProducts(
             @RequestParam String keyword) {
         ResponseEntity<? super SaveProductResponseDto> response = productService.saveProductsFromApi(keyword);
