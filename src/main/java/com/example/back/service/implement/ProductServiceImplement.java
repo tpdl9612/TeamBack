@@ -1,10 +1,14 @@
 package com.example.back.service.implement;
 
 import com.example.back.dto.request.product.SaveProductRequestDto;
+import com.example.back.dto.response.ResponseDto;
+import com.example.back.dto.response.product.ListProductResponseDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
 import com.example.back.entity.ProductEntity;
+import com.example.back.entity.UserEntity;
 import com.example.back.repository.ProductRepository;
+import com.example.back.repository.UserRepository;
 import com.example.back.service.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +17,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +32,7 @@ public class ProductServiceImplement implements ProductService {
 
     private final RestTemplate restTemplate;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword) {
@@ -67,6 +73,22 @@ public class ProductServiceImplement implements ProductService {
             productRepository.save(product);
             return SaveProductResponseDto.success();
         }
+    }
+
+    @Override
+    public ResponseEntity<? super ListProductResponseDto> getUserCartList(String userId) {
+        List<ProductEntity> cartListViewEntities = new ArrayList<>();
+
+        try {
+            boolean existedUser = userRepository.existsByUserId(userId);
+            if (!existedUser) return ListProductResponseDto.notExistUser();
+
+            cartListViewEntities = productRepository.findByUserId(userId);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return ListProductResponseDto.success(cartListViewEntities);
     }
 
 
