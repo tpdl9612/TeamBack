@@ -1,16 +1,15 @@
 package com.example.back.service.implement;
 
+import com.example.back.dto.request.product.SaveProductRequestDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
+import com.example.back.dto.response.product.SearchProductResponseDto;
 import com.example.back.entity.ProductEntity;
 import com.example.back.repository.ProductRepository;
 import com.example.back.service.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,7 +29,7 @@ public class ProductServiceImplement implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public ResponseEntity<? super SaveProductResponseDto> saveProductsFromApi(String keyword) {
+    public ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword) {
         String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=20";
 
         HttpHeaders headers = new HttpHeaders();
@@ -41,7 +40,6 @@ public class ProductServiceImplement implements ProductService {
 
         ResponseEntity<NaverResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, NaverResponse.class);
         NaverResponse naverResponse = responseEntity.getBody();
-        System.out.println(responseEntity.getBody());
         if (naverResponse != null && naverResponse.getItems() != null) {
             List<ProductEntity> productEntities = naverResponse.getItems().stream().map(item -> {
                 ProductEntity product = new ProductEntity();
@@ -53,21 +51,25 @@ public class ProductServiceImplement implements ProductService {
                 product.setCount(item.getCount());
                 product.setCategory1(item.getCategory1());
                 product.setCategory2(item.getCategory2());
-
-                Optional<ProductEntity> existingProduct = productRepository.findByTitle(product.getTitle());
-                if (existingProduct.isPresent()) {
-                    return null;
-                } else {
-                    return product;
-                }
-            }).filter(Objects::nonNull).collect(Collectors.toList());
-
-            productRepository.saveAll(productEntities);
-
-            return SaveProductResponseDto.success(productEntities);
+                return product;
+            }).collect(Collectors.toList());
+            return ResponseEntity.ok(SearchProductResponseDto.success(productEntities));
         }
-        return SaveProductResponseDto.fail();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SearchProductResponseDto.fail());
     }
+
+
+    @Override
+    public ResponseEntity<? super SaveProductResponseDto> saveProducts(SaveProductRequestDto dto) {
+        Optional<ProductEntity> existingProduct = productRepository.findByTitle(dto.getTitle());
+        if (existingProduct.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(SaveProductResponseDto.fail());
+        } else {
+            productRepository.save(dto);
+            return ResponseEntity.ok(SaveProductResponseDto.success());
+        }
+    }
+
 
 
     private static class NaverResponse {
