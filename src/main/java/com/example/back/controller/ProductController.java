@@ -1,13 +1,12 @@
 package com.example.back.controller;
 
+import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
+import com.example.back.entity.ProductEntity;
 import com.example.back.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +19,12 @@ public class ProductController {
     public ResponseEntity<? super SearchProductResponseDto> saveProducts(
             @RequestParam String keyword) {
         ResponseEntity<? super SearchProductResponseDto> response = productService.searchProductsFromApi(keyword);
+        return response;
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<? super SaveProductResponseDto> saveProduct(@RequestBody ProductEntity product) {
+        ResponseEntity<? super SaveProductResponseDto> response = productService.saveProducts(product);
         return response;
     }
 }
