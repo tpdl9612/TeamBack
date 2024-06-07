@@ -15,6 +15,7 @@ public class SaveProductRequestDto {
     private String link;
     private String image;
     private String lowPrice;
+    private String userId;
     private int count;
     private String category1;
     private String category2;

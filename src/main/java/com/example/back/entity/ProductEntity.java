@@ -19,6 +19,7 @@ public class ProductEntity {
     @Id
     @Column(name = "product_id")
     private Long productId;
+    private String userId;
     private String title;
     private String link;
     private String image;
