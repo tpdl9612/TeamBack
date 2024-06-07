@@ -48,14 +48,13 @@ public class ProductServiceImplement implements ProductService {
                 product.setLink(item.getLink());
                 product.setImage(item.getImage());
                 product.setLowPrice(item.getLprice());
-                product.setCount(item.getCount());
                 product.setCategory1(item.getCategory1());
                 product.setCategory2(item.getCategory2());
                 return product;
-            }).collect(Collectors.toList());
-            return ResponseEntity.ok(SearchProductResponseDto.success(productEntities));
+            }).filter(Objects::nonNull).collect(Collectors.toList());
+            return SearchProductResponseDto.success(productEntities);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SearchProductResponseDto.fail());
+        return SearchProductResponseDto.fail();
     }
 
 
