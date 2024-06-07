@@ -23,7 +23,6 @@ public class ProductEntity {
     private String link;
     private String image;
     private String lowPrice;
-    private int count;
     private String category1;
     private String category2;
 }

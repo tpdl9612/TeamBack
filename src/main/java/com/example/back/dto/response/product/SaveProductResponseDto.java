@@ -3,20 +3,15 @@ package com.example.back.dto.response.product;
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.response.ResponseDto;
-import com.example.back.entity.ProductEntity;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 @Getter
 public class SaveProductResponseDto extends ResponseDto {
-//    private List<ProductEntity> items;
 
     public SaveProductResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-//        this.items = items;
     }
 
     public static ResponseEntity<SaveProductResponseDto> success(){
