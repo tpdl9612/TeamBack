@@ -7,30 +7,29 @@ import com.example.back.entity.ProductEntity;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 @Getter
-public class SaveProductResponseDto extends ResponseDto {
-//    private List<ProductEntity> items;
+public class SearchProductResponseDto extends ResponseDto {
+    private List<ProductEntity> items;
 
-    public SaveProductResponseDto() {
+    public SearchProductResponseDto(List<ProductEntity> items) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-//        this.items = items;
+        this.items = items;
     }
 
-    public static ResponseEntity<SaveProductResponseDto> success(){
-        SaveProductResponseDto responseBody = new SaveProductResponseDto();
+    public static ResponseEntity<SearchProductResponseDto> success(List<ProductEntity> items){
+        SearchProductResponseDto responseBody = new SearchProductResponseDto(items);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
     public static ResponseEntity<ResponseDto> duplicatedTitle(){
         ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_TITLE, ResponseMessage.DUPLICATED_TITLE);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
     }
 
-    public static ResponseEntity<SaveProductResponseDto> fail(){
-        SaveProductResponseDto responseBody = new SaveProductResponseDto();
+    public static ResponseEntity<SearchProductResponseDto> fail(){
+        SearchProductResponseDto responseBody = new SearchProductResponseDto(null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.back.controller;
 
-import com.example.back.dto.response.product.SaveProductResponseDto;
+import com.example.back.dto.response.product.SearchProductResponseDto;
 import com.example.back.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,9 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/search")
-    public ResponseEntity<? super SaveProductResponseDto> saveProducts(
+    public ResponseEntity<? super SearchProductResponseDto> saveProducts(
             @RequestParam String keyword) {
-        ResponseEntity<? super SaveProductResponseDto> response = productService.saveProductsFromApi(keyword);
+        ResponseEntity<? super SearchProductResponseDto> response = productService.searchProductsFromApi(keyword);
         return response;
     }
 }
