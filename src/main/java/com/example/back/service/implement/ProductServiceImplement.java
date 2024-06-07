@@ -60,13 +60,13 @@ public class ProductServiceImplement implements ProductService {
 
 
     @Override
-    public ResponseEntity<? super SaveProductResponseDto> saveProducts(SaveProductRequestDto dto) {
-        Optional<ProductEntity> existingProduct = productRepository.findByTitle(dto.getTitle());
+    public ResponseEntity<? super SaveProductResponseDto> saveProducts(ProductEntity product) {
+        Optional<ProductEntity> existingProduct = productRepository.findByTitle(product.getTitle());
         if (existingProduct.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(SaveProductResponseDto.fail());
+            return SaveProductResponseDto.duplicatedTitle();
         } else {
-            productRepository.save(dto);
-            return ResponseEntity.ok(SaveProductResponseDto.success());
+            productRepository.save(product);
+            return SaveProductResponseDto.success();
         }
     }
 
