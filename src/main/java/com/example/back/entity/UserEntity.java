@@ -24,6 +24,8 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
     private String nickname;
+    private String name;
+    private String gender;
     private String profileImage;
     private String provider;
     private String type;
@@ -34,6 +36,8 @@ public class UserEntity {
         this.password = dto.getPassword();
         this.email = dto.getEmail();
         this.nickname = dto.getNickname();
+        this.name= dto.getName();
+        this.gender = dto.getGender();
         this.type = "app";
         this.role = "ROLE_USER";
     }
