@@ -24,8 +24,18 @@ public class SaveProductResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
     }
 
-    public static ResponseEntity<SaveProductResponseDto> fail(){
-        SaveProductResponseDto responseBody = new SaveProductResponseDto();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
+    public static ResponseEntity<ResponseDto> notExistProduct(){
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXISTED_PRODUCT, ResponseMessage.NOT_EXISTED_PRODUCT);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
+
+    public static ResponseEntity<ResponseDto> duplicatedProduct(){
+        ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_PRODUCT, ResponseMessage.DUPLICATED_PRODUCT);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
+    }
+
+    public static ResponseEntity<ResponseDto> notExistUser(){
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
 }

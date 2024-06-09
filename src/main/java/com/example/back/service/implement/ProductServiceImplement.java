@@ -6,14 +6,16 @@ import com.example.back.dto.response.product.ListProductResponseDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
 import com.example.back.entity.ProductEntity;
-import com.example.back.entity.UserEntity;
 import com.example.back.repository.ProductRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -65,20 +67,26 @@ public class ProductServiceImplement implements ProductService {
 
 
     @Override
-    public ResponseEntity<? super SaveProductResponseDto> saveProducts(ProductEntity product) {
-        Optional<ProductEntity> existingProduct = productRepository.findByTitle(product.getTitle());
-        if (existingProduct.isPresent()) {
-            return SaveProductResponseDto.duplicatedTitle();
-        } else {
-            productRepository.save(product);
-            return SaveProductResponseDto.success();
+    public ResponseEntity<? super SaveProductResponseDto> saveProducts(SaveProductRequestDto dto, String userId) {
+        try {
+            boolean existedUser = userRepository.existsByUserId(userId);
+            if (!existedUser) return SaveProductResponseDto.notExistUser();
+            ProductEntity productEntity = new ProductEntity(dto, userId);
+            productRepository.save(productEntity);
+
+            Optional<ProductEntity> existingProduct = productRepository.findByTitle(dto.getTitle());
+            if (existingProduct.isPresent()) return SaveProductResponseDto.duplicatedTitle();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
         }
+        return SaveProductResponseDto.success();
     }
 
     @Override
     public ResponseEntity<? super ListProductResponseDto> getUserCartList(String userId) {
         List<ProductEntity> cartListViewEntities = new ArrayList<>();
-
         try {
             boolean existedUser = userRepository.existsByUserId(userId);
             if (!existedUser) return ListProductResponseDto.notExistUser();
@@ -92,12 +100,13 @@ public class ProductServiceImplement implements ProductService {
     }
 
 
-
     private static class NaverResponse {
         private List<Item> items;
+
         public List<Item> getItems() {
             return items;
         }
+
         public void setItems(List<Item> items) {
             this.items = items;
         }
