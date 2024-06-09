@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SaveProductRequestDto {
 
+    private Long productId;
     private String title;
     private String link;
     private String image;
