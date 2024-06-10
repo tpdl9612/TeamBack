@@ -28,11 +28,6 @@ public class SignUpRequestDto {
     @NotBlank
     private String nickname;
 
-    @NotBlank
-    private String name;
-
-    @NotBlank
-    private String gender;
 
     @NotBlank
     private String certificationNumber;
