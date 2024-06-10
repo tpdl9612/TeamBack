@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class SignUpResponseDto extends ResponseDto {
 
-    private SignUpResponseDto() {super();}
+    private SignUpResponseDto() {super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);}
 
     public static ResponseEntity<SignUpResponseDto> success(){
         SignUpResponseDto responseBody = new SignUpResponseDto();

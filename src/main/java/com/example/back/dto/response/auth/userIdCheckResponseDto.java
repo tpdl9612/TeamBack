@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 public class userIdCheckResponseDto extends ResponseDto{
 
     private userIdCheckResponseDto(){
-        super();
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
     public static ResponseEntity<userIdCheckResponseDto> success(){
