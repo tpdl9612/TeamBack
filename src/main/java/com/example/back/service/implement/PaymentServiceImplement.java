@@ -26,20 +26,27 @@ public class PaymentServiceImplement implements PaymentService {
     public JSONObject confirmPayment(String jsonBody) throws Exception {
         JSONParser parser = new JSONParser();
         String orderId;
-        String amount;
+        String amountStr;
         String paymentKey;
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
-            amount = (String) requestData.get("amount");
+            Object amountObject = requestData.get("amount");
+            if (amountObject instanceof Long) {
+                amountStr = Long.toString((Long) amountObject);
+            } else if (amountObject instanceof Integer) {
+                amountStr = Integer.toString((Integer) amountObject);
+            } else {
+                throw new RuntimeException("Invalid amount type: " + amountObject.getClass().getName());
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
         JSONObject obj = new JSONObject();
         obj.put("orderId", orderId);
-        obj.put("amount", amount);
+        obj.put("amount", amountStr);
         obj.put("paymentKey", paymentKey);
 
         String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
