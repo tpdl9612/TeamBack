@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 public class NicknameCheckResponseDto extends ResponseDto {
 
     private NicknameCheckResponseDto(){
-        super();
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
     public static ResponseEntity<NicknameCheckResponseDto> success(){

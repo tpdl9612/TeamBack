@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 public class CheckCertificationResponseDto extends ResponseDto {
 
     private CheckCertificationResponseDto(){
-        super();
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
     public static ResponseEntity<CheckCertificationResponseDto> success(){

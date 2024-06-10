@@ -60,6 +60,7 @@ public class ProductServiceImplement implements ProductService {
                     product.setLowPrice(item.getLprice());
                     product.setCategory1(item.getCategory1());
                     product.setCategory2(item.getCategory2());
+                    product.setMallName(item.getMallName());
                     return product;
                 }
                 return null;

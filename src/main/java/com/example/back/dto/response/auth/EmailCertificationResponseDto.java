@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 public class EmailCertificationResponseDto extends ResponseDto {
 
     private EmailCertificationResponseDto(){
-        super();
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
     public static ResponseEntity<EmailCertificationResponseDto> success(){
