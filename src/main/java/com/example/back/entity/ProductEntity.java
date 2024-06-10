@@ -27,6 +27,7 @@ public class ProductEntity {
     private String lowPrice;
     private String category1;
     private String category2;
+    private String mallName;
 
     public ProductEntity(SaveProductRequestDto dto, String userId) {
         this.productId = dto.getProductId();
@@ -37,5 +38,6 @@ public class ProductEntity {
         this.lowPrice = dto.getLowPrice();
         this.category1 = dto.getCategory1();
         this.category2 = dto.getCategory2();
+        this.mallName = dto.getMallName();
     }
 }

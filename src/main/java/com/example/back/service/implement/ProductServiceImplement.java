@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +37,8 @@ public class ProductServiceImplement implements ProductService {
 
     @Override
     public ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword) {
-        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=20";
+        String certificationCodes = "GS,CU,세븐일레븐";
+        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=100&certification=" + certificationCodes;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", CLIENT_ID);
@@ -48,17 +48,21 @@ public class ProductServiceImplement implements ProductService {
 
         ResponseEntity<NaverResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, NaverResponse.class);
         NaverResponse naverResponse = responseEntity.getBody();
+
         if (naverResponse != null && naverResponse.getItems() != null) {
             List<ProductEntity> productEntities = naverResponse.getItems().stream().map(item -> {
-                ProductEntity product = new ProductEntity();
-                product.setProductId(item.getProductId());
-                product.setTitle(removeHtmlTags(item.getTitle()));
-                product.setLink(item.getLink());
-                product.setImage(item.getImage());
-                product.setLowPrice(item.getLprice());
-                product.setCategory1(item.getCategory1());
-                product.setCategory2(item.getCategory2());
-                return product;
+                if ("네이버".equals(item.getMallName())) {
+                    ProductEntity product = new ProductEntity();
+                    product.setProductId(item.getProductId());
+                    product.setTitle(removeHtmlTags(item.getTitle()));
+                    product.setLink(item.getLink());
+                    product.setImage(item.getImage());
+                    product.setLowPrice(item.getLprice());
+                    product.setCategory1(item.getCategory1());
+                    product.setCategory2(item.getCategory2());
+                    return product;
+                }
+                return null;
             }).filter(Objects::nonNull).collect(Collectors.toList());
             return SearchProductResponseDto.success(productEntities);
         }
@@ -72,11 +76,14 @@ public class ProductServiceImplement implements ProductService {
             boolean existedUser = userRepository.existsByUserId(userId);
             if (!existedUser) return SaveProductResponseDto.notExistUser();
 
+            ProductEntity entity = productRepository.findByProductId(dto.getProductId());
+            if(entity != null) {
+                System.out.println(dto.getProductId());
+                System.out.println(entity.getProductId());
+                if (entity.getProductId().equals(dto.getProductId())) return SaveProductResponseDto.duplicatedProduct();
+            }
             ProductEntity productEntity = new ProductEntity(dto, userId);
             productRepository.save(productEntity);
-
-            Optional<ProductEntity> existingProduct = productRepository.findByTitle(dto.getTitle());
-            if (existingProduct.isPresent()) return SaveProductResponseDto.duplicatedTitle();
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -124,6 +131,7 @@ public class ProductServiceImplement implements ProductService {
         private int count;
         private String category1;
         private String category2;
+        private String mallName;
     }
 
     private String removeHtmlTags(String html) {

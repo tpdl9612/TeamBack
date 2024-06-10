@@ -19,16 +19,6 @@ public class SaveProductResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
-    public static ResponseEntity<ResponseDto> duplicatedTitle(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_TITLE, ResponseMessage.DUPLICATED_TITLE);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
-    }
-
-    public static ResponseEntity<ResponseDto> notExistProduct(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXISTED_PRODUCT, ResponseMessage.NOT_EXISTED_PRODUCT);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
-    }
-
     public static ResponseEntity<ResponseDto> duplicatedProduct(){
         ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_PRODUCT, ResponseMessage.DUPLICATED_PRODUCT);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);

@@ -20,4 +20,5 @@ public class SaveProductRequestDto {
     private int count;
     private String category1;
     private String category2;
+    private String mallName;
 }
