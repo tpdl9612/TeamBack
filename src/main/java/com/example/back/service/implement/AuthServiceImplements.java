@@ -58,8 +58,7 @@ public class AuthServiceImplements implements AuthService {
     }
 
     @Override
-    public ResponseEntity<? super EmailCertificationResponseDto> emailCertification
-            (EmailCertificationRequestDto dto) {
+    public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto) {
         try {
 
             String userId = dto.getUserId();
