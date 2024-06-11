@@ -1,13 +1,14 @@
 package com.example.back.controller;
 
-import com.example.back.dto.response.user.GetSignInUserResponseDto;
+import com.example.back.dto.request.user.ChangePasswordRequestDto;
+import com.example.back.dto.request.user.PatchNicknameRequestDto;
+import com.example.back.dto.response.user.*;
 import com.example.back.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,4 +24,38 @@ public class UserController {
         ResponseEntity<? super GetSignInUserResponseDto> responseBody = userService.getSignInUser(userId);
         return responseBody;
     }
+    @GetMapping("/{userId}")
+    public ResponseEntity<? super GetUserResponseDto> getUser(
+            @PathVariable("userId") String userId
+    ) {
+        ResponseEntity<? super GetUserResponseDto> responseBody = userService.getUser(userId);
+        return responseBody;
+    }
+
+    @PatchMapping("/change-password/{userId}")
+    public ResponseEntity<? super ChangePasswordResponseDto> changePassword(
+            @RequestBody @Valid ChangePasswordRequestDto requestBody,
+            @PathVariable("userId") String userId
+    ){
+        ResponseEntity<? super ChangePasswordResponseDto> response = userService.changePassword(requestBody, userId);
+        return response;
+    }
+
+    @PatchMapping("/nickname")
+    public ResponseEntity<? super PatchNicknameResponseDto> patchNickname(
+            @RequestBody @Valid PatchNicknameRequestDto requestBody,
+            @AuthenticationPrincipal String userId
+    ) {
+        ResponseEntity<? super PatchNicknameResponseDto> response = userService.patchNickname(requestBody, userId);
+        return response;
+    }
+
+    @DeleteMapping("/withdrawal/{userId}")
+    public ResponseEntity<?> withdrawalUser(
+            @PathVariable("userId") String userId
+    ) {
+        ResponseEntity<? super WithdrawalUserResponseDto> response = userService.withdrawalUser(userId);
+        return response;
+    }
+
 }
