@@ -23,4 +23,6 @@ public interface ResponseMessage {
 
     String DUPLICATED_TITLE = "Duplicate Title";
     String DUPLICATED_PRODUCT = "Duplicate Product";
+    String DUPLICATED_ORDER = "Duplicate Order";
+    String DUPLICATED_PHONE_NUMBER = "Duplicate Phone Number";
 }
