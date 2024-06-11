@@ -1,11 +1,19 @@
 package com.example.back.service.implement;
 
+import com.example.back.dto.response.ResponseDto;
+import com.example.back.dto.response.payment.PaymentResponseDto;
+import com.example.back.entity.PaymentEntity;
+import com.example.back.entity.ProductEntity;
+import com.example.back.repository.PaymentRepository;
+import com.example.back.repository.ProductRepository;
 import com.example.back.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -15,12 +23,17 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImplement implements PaymentService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final PaymentRepository paymentRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public JSONObject confirmPayment(String jsonBody) throws Exception {
@@ -76,5 +89,32 @@ public class PaymentServiceImplement implements PaymentService {
         responseStream.close();
 
         return jsonObject;
+    }
+
+    @Override
+    public ResponseEntity<? super PaymentResponseDto> savePaymentInfo(JSONObject paymentInfo) {
+        String orderId = (String) paymentInfo.get("orderId");
+        String userId = (String) paymentInfo.get("customerId");
+        if (paymentRepository.existsByOrderId(orderId)) {
+            return PaymentResponseDto.duplicatedOrder();
+        }
+        PaymentEntity paymentEntity = new PaymentEntity();
+        List<ProductEntity> productEntity = new ArrayList<>();
+        try{
+            paymentEntity.setOrderId((String) paymentInfo.get("orderId"));
+            paymentEntity.setCustomerName((String) paymentInfo.get("customerName"));
+            paymentEntity.setCustomerEmail((String) paymentInfo.get("customerEmail"));
+            paymentEntity.setCustomerPhone((String) paymentInfo.get("customerPhone"));
+            paymentEntity.setAmount((String) paymentInfo.get("amount"));
+            paymentEntity.setPaymentKey((String) paymentInfo.get("paymentKey"));
+
+            paymentRepository.save(paymentEntity);
+//            productEntity = productRepository.findByUserId(userId);
+//            productRepository.deleteAll(productEntity);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PaymentResponseDto.success();
     }
 }

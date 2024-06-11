@@ -65,7 +65,7 @@ public class AuthServiceImplements implements AuthService {
             String email = dto.getEmail();
 
             boolean isExistId = userRepository.existsByEmail(email);
-            if (isExistId) return EmailCertificationResponseDto.duplicated();
+            if (isExistId) return EmailCertificationResponseDto.duplicatedEmail();
 
             String certificationNumber = getCertificationNumber();
 

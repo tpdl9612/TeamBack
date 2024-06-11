@@ -1,19 +1,19 @@
 package com.example.back.controller;
 
+import com.example.back.dto.response.payment.PaymentResponseDto;
 import com.example.back.service.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 @RestController
 @RequestMapping("/api/v1/payment")
+@RequiredArgsConstructor
 public class PaymentController {
 
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -47,5 +47,11 @@ public class PaymentController {
         response.put("message", failMessage);
 
         return ResponseEntity.status(400).body(response);
+    }
+
+    @PostMapping("/savePaymentInfo")
+    public ResponseEntity<? super PaymentResponseDto> savePaymentInfo(@RequestBody JSONObject paymentInfo) {
+        ResponseEntity<? super PaymentResponseDto> response = paymentService.savePaymentInfo(paymentInfo);
+        return response;
     }
 }
