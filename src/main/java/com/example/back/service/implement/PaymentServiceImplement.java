@@ -102,8 +102,10 @@ public class PaymentServiceImplement implements PaymentService {
         List<ProductEntity> productEntity = new ArrayList<>();
         try{
             paymentEntity.setOrderId((String) paymentInfo.get("orderId"));
+            paymentEntity.setCustomerId((String) paymentInfo.get("customerId"));
             paymentEntity.setCustomerName((String) paymentInfo.get("customerName"));
             paymentEntity.setCustomerEmail((String) paymentInfo.get("customerEmail"));
+            paymentEntity.setCustomerAddress((String) paymentInfo.get("customerAddress"));
             paymentEntity.setCustomerPhone((String) paymentInfo.get("customerPhone"));
             paymentEntity.setAmount((String) paymentInfo.get("amount"));
             paymentEntity.setPaymentKey((String) paymentInfo.get("paymentKey"));

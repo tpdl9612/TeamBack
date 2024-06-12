@@ -18,8 +18,10 @@ public class PaymentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String orderId;
+    private String customerId;
     private String customerName;
     private String customerEmail;
+    private String customerAddress;
     private String customerPhone;
     private String amount;
     private String paymentKey;
