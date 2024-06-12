@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -94,12 +95,14 @@ public class PaymentServiceImplement implements PaymentService {
     @Override
     public ResponseEntity<? super PaymentResponseDto> savePaymentInfo(JSONObject paymentInfo) {
         String orderId = (String) paymentInfo.get("orderId");
-        String userId = (String) paymentInfo.get("customerId");
+        //TODO: productIds를 List<Long>으로 받아오는 방법을 찾아보세요.
+        List<Long> productIds = (List<Long>) paymentInfo.get("productIds");
+
         if (paymentRepository.existsByOrderId(orderId)) {
             return PaymentResponseDto.duplicatedOrder();
         }
         PaymentEntity paymentEntity = new PaymentEntity();
-        List<ProductEntity> productEntity = new ArrayList<>();
+        List<ProductEntity> productEntities = new ArrayList<>();
         try{
             paymentEntity.setOrderId((String) paymentInfo.get("orderId"));
             paymentEntity.setCustomerId((String) paymentInfo.get("customerId"));
@@ -107,12 +110,17 @@ public class PaymentServiceImplement implements PaymentService {
             paymentEntity.setCustomerEmail((String) paymentInfo.get("customerEmail"));
             paymentEntity.setCustomerAddress((String) paymentInfo.get("customerAddress"));
             paymentEntity.setCustomerPhone((String) paymentInfo.get("customerPhone"));
+            paymentEntity.setProductIds(productIds);
             paymentEntity.setAmount((String) paymentInfo.get("amount"));
             paymentEntity.setPaymentKey((String) paymentInfo.get("paymentKey"));
 
             paymentRepository.save(paymentEntity);
-//            productEntity = productRepository.findByUserId(userId);
-//            productRepository.deleteAll(productEntity);
+
+            for (Long productId : productIds) {
+                Optional<ProductEntity> productEntityOptional = productRepository.findById(productId);
+                productEntityOptional.ifPresent(productEntities::add);
+            }
+            productRepository.deleteAll(productEntities);
         }catch (Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
