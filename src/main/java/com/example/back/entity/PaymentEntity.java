@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,4 +27,5 @@ public class PaymentEntity {
     private String customerPhone;
     private String amount;
     private String paymentKey;
+    private List<Long> productIds;
 }
