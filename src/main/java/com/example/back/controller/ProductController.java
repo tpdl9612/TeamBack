@@ -1,6 +1,7 @@
 package com.example.back.controller;
 
 import com.example.back.dto.request.product.SaveProductRequestDto;
+import com.example.back.dto.response.product.DeleteProductResponseDto;
 import com.example.back.dto.response.product.ListProductResponseDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
@@ -37,6 +38,14 @@ public class ProductController {
             @PathVariable("userId") String userId
     ) {
         ResponseEntity<? super ListProductResponseDto> response = productService.getUserCartList(userId);
+        return response;
+    }
+
+    @DeleteMapping("/delete/{productId}")
+    public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(
+            @PathVariable("productId") Long productId
+    ) {
+        ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId);
         return response;
     }
 }

@@ -2,6 +2,7 @@ package com.example.back.service.implement;
 
 import com.example.back.dto.request.product.SaveProductRequestDto;
 import com.example.back.dto.response.ResponseDto;
+import com.example.back.dto.response.product.DeleteProductResponseDto;
 import com.example.back.dto.response.product.ListProductResponseDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
@@ -106,6 +107,20 @@ public class ProductServiceImplement implements ProductService {
             return ResponseDto.databaseError();
         }
         return ListProductResponseDto.success(cartListViewEntities);
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId) {
+        try {
+            ProductEntity productEntity = productRepository.findByProductId(productId);
+            if (productEntity == null) return DeleteProductResponseDto.notExistedProduct();
+
+            productRepository.delete(productEntity);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return DeleteProductResponseDto.success();
     }
 
 
