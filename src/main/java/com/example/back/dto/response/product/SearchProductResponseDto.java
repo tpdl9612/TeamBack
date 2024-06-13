@@ -23,11 +23,6 @@ public class SearchProductResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
-    public static ResponseEntity<ResponseDto> duplicatedTitle(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_TITLE, ResponseMessage.DUPLICATED_TITLE);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
-    }
-
     public static ResponseEntity<SearchProductResponseDto> fail(){
         SearchProductResponseDto responseBody = new SearchProductResponseDto(null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);

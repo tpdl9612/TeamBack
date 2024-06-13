@@ -17,11 +17,13 @@ public interface ResponseCode {
     String DATABASE_ERROR = "DBE";
 
     String NOT_EXISTED_USER = "NU";
-    String NOT_EXISTED_BOARD = "NB";
-    String NOT_EXISTED_MUSIC = "NM";
+    String NOT_EXISTED_PRODUCT = "NP";
 
     String WRONG_PASSWORD = "WP";
     String DO_NOT_HAVE_PERMISSION = "NP";
 
     String DUPLICATED_TITLE = "DT";
+    String DUPLICATED_PRODUCT = "DP";
+    String DUPLICATED_ORDER = "DO";
+    String DUPLECATED_PHONE_NUMBER = "DPN";
 }

@@ -1,21 +1,28 @@
 package com.example.back.service.implement;
 
 import com.example.back.dto.request.product.SaveProductRequestDto;
+import com.example.back.dto.response.ResponseDto;
+import com.example.back.dto.response.product.DeleteProductResponseDto;
+import com.example.back.dto.response.product.ListProductResponseDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
 import com.example.back.entity.ProductEntity;
 import com.example.back.repository.ProductRepository;
+import com.example.back.repository.UserRepository;
 import com.example.back.service.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,10 +34,11 @@ public class ProductServiceImplement implements ProductService {
 
     private final RestTemplate restTemplate;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword) {
-        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=20";
+        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=100";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", CLIENT_ID);
@@ -40,43 +48,87 @@ public class ProductServiceImplement implements ProductService {
 
         ResponseEntity<NaverResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, NaverResponse.class);
         NaverResponse naverResponse = responseEntity.getBody();
+
         if (naverResponse != null && naverResponse.getItems() != null) {
             List<ProductEntity> productEntities = naverResponse.getItems().stream().map(item -> {
-                ProductEntity product = new ProductEntity();
-                product.setProductId(item.getProductId());
-                product.setTitle(removeHtmlTags(item.getTitle()));
-                product.setLink(item.getLink());
-                product.setImage(item.getImage());
-                product.setLowPrice(item.getLprice());
-                product.setCount(item.getCount());
-                product.setCategory1(item.getCategory1());
-                product.setCategory2(item.getCategory2());
-                return product;
-            }).collect(Collectors.toList());
-            return ResponseEntity.ok(SearchProductResponseDto.success(productEntities));
+                if ("네이버".equals(item.getMallName())) {
+                    ProductEntity product = new ProductEntity();
+                    product.setProductId(item.getProductId());
+                    product.setTitle(removeHtmlTags(item.getTitle()));
+                    product.setLink(item.getLink());
+                    product.setImage(item.getImage());
+                    product.setLowPrice(item.getLprice());
+                    product.setCategory1(item.getCategory1());
+                    product.setCategory2(item.getCategory2());
+                    product.setMallName(item.getMallName());
+                    return product;
+                }
+                return null;
+            }).filter(Objects::nonNull).collect(Collectors.toList());
+            return SearchProductResponseDto.success(productEntities);
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(SearchProductResponseDto.fail());
+        return SearchProductResponseDto.fail();
     }
-
 
     @Override
-    public ResponseEntity<? super SaveProductResponseDto> saveProducts(ProductEntity product) {
-        Optional<ProductEntity> existingProduct = productRepository.findByTitle(product.getTitle());
-        if (existingProduct.isPresent()) {
-            return SaveProductResponseDto.duplicatedTitle();
-        } else {
-            productRepository.save(product);
-            return SaveProductResponseDto.success();
+    public ResponseEntity<? super SaveProductResponseDto> saveProducts(SaveProductRequestDto dto, String userId) {
+        try {
+            boolean existedUser = userRepository.existsByUserId(userId);
+            if (!existedUser) return SaveProductResponseDto.notExistUser();
+
+            ProductEntity entity = productRepository.findByProductId(dto.getProductId());
+            if(entity != null) {
+                System.out.println(dto.getProductId());
+                System.out.println(entity.getProductId());
+                if (entity.getProductId().equals(dto.getProductId())) return SaveProductResponseDto.duplicatedProduct();
+            }
+            ProductEntity productEntity = new ProductEntity(dto, userId);
+            productRepository.save(productEntity);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
         }
+        return SaveProductResponseDto.success();
     }
 
+    @Override
+    public ResponseEntity<? super ListProductResponseDto> getUserCartList(String userId) {
+        List<ProductEntity> cartListViewEntities = new ArrayList<>();
+        try {
+            boolean existedUser = userRepository.existsByUserId(userId);
+            if (!existedUser) return ListProductResponseDto.notExistUser();
+
+            cartListViewEntities = productRepository.findByUserId(userId);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return ListProductResponseDto.success(cartListViewEntities);
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId) {
+        try {
+            ProductEntity productEntity = productRepository.findByProductId(productId);
+            if (productEntity == null) return DeleteProductResponseDto.notExistedProduct();
+
+            productRepository.delete(productEntity);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return DeleteProductResponseDto.success();
+    }
 
 
     private static class NaverResponse {
         private List<Item> items;
+
         public List<Item> getItems() {
             return items;
         }
+
         public void setItems(List<Item> items) {
             this.items = items;
         }
@@ -93,6 +145,7 @@ public class ProductServiceImplement implements ProductService {
         private int count;
         private String category1;
         private String category2;
+        private String mallName;
     }
 
     private String removeHtmlTags(String html) {
