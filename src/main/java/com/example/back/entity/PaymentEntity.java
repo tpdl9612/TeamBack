@@ -27,5 +27,7 @@ public class PaymentEntity {
     private String customerPhone;
     private String amount;
     private String paymentKey;
+
+    @ElementCollection
     private List<Long> productIds;
 }

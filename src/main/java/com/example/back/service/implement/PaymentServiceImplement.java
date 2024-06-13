@@ -7,6 +7,9 @@ import com.example.back.entity.ProductEntity;
 import com.example.back.repository.PaymentRepository;
 import com.example.back.repository.ProductRepository;
 import com.example.back.service.PaymentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,6 +38,7 @@ public class PaymentServiceImplement implements PaymentService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final PaymentRepository paymentRepository;
     private final ProductRepository productRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     public JSONObject confirmPayment(String jsonBody) throws Exception {
@@ -94,9 +98,23 @@ public class PaymentServiceImplement implements PaymentService {
 
     @Override
     public ResponseEntity<? super PaymentResponseDto> savePaymentInfo(JSONObject paymentInfo) {
-        String orderId = (String) paymentInfo.get("orderId");
-        //TODO: productIds를 List<Long>으로 받아오는 방법을 찾아보세요.
-        List<Long> productIds = (List<Long>) paymentInfo.get("productIds");
+        String orderId = ((String) paymentInfo.get("orderId")).trim();
+        String customerId = ((String) paymentInfo.get("customerId")).trim();
+        String customerName = ((String) paymentInfo.get("customerName")).trim();
+        String customerEmail = ((String) paymentInfo.get("customerEmail")).trim();
+        String customerPhone = ((String) paymentInfo.get("customerPhone")).trim();
+        String customerAddress = ((String) paymentInfo.get("customerAddress")).trim();
+        String amountStr = ((String) paymentInfo.get("amount")).trim();
+        String paymentKey = ((String) paymentInfo.get("paymentKey")).trim();
+
+        List<Long> productIds;
+        try {
+            String productIdsStr = ((String) paymentInfo.get("productIds")).trim();
+            productIds = objectMapper.readValue(productIdsStr, new TypeReference<List<Long>>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return ResponseDto.validationFail();
+        }
 
         if (paymentRepository.existsByOrderId(orderId)) {
             return PaymentResponseDto.duplicatedOrder();
@@ -104,15 +122,15 @@ public class PaymentServiceImplement implements PaymentService {
         PaymentEntity paymentEntity = new PaymentEntity();
         List<ProductEntity> productEntities = new ArrayList<>();
         try{
-            paymentEntity.setOrderId((String) paymentInfo.get("orderId"));
-            paymentEntity.setCustomerId((String) paymentInfo.get("customerId"));
-            paymentEntity.setCustomerName((String) paymentInfo.get("customerName"));
-            paymentEntity.setCustomerEmail((String) paymentInfo.get("customerEmail"));
-            paymentEntity.setCustomerAddress((String) paymentInfo.get("customerAddress"));
-            paymentEntity.setCustomerPhone((String) paymentInfo.get("customerPhone"));
+            paymentEntity.setOrderId(orderId);
+            paymentEntity.setCustomerId(customerId);
+            paymentEntity.setCustomerName(customerName);
+            paymentEntity.setCustomerEmail(customerEmail);
+            paymentEntity.setCustomerAddress(customerAddress);
+            paymentEntity.setCustomerPhone(customerPhone);
             paymentEntity.setProductIds(productIds);
-            paymentEntity.setAmount((String) paymentInfo.get("amount"));
-            paymentEntity.setPaymentKey((String) paymentInfo.get("paymentKey"));
+            paymentEntity.setAmount(amountStr);
+            paymentEntity.setPaymentKey(paymentKey);
 
             paymentRepository.save(paymentEntity);
 
