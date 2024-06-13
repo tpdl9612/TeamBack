@@ -24,6 +24,7 @@ jobs:
          distribution: 'build'
          java-version: '17'
 
+<<<<<<< HEAD
        - name: Grant execute
          run: chmod +x gradlew
 
@@ -55,3 +56,43 @@ jobs:
              sudo docker build -t tdb .
              sudo docker create --name back-container -p 80:8080 tdb:latest
              sudo docker start back-container
+=======
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'build'
+        java-version: '17'
+        
+    - name: Grant execute
+      run: chmod +x gradlew
+      
+    - name: Build
+      run: |
+        echo Build.
+        npm run build
+
+    - name: AWS 인증하기
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Deploy to Lightsail
+      uses: orderabbit/store24H-back@v1
+      with:
+        host: ${{ secrets.LIGHTSAIL_HOST }}
+        username: ${{ secrets.LIGHTSAIL_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: '*'
+        strip_components: 1
+        target: '/home/ubuntu/{project-name}'
+        script: |
+          cd /home/ubuntu/store24H-back
+          # 다음에 artifact 사용 가능
+          echo $artifact
+          sudo docker stop back-container
+          sudo docker rm back-container
+          sudo docker build -t tdb .
+          sudo docker create --name back-container -p 80:8080 tdb:latest
+          sudo docker start back-container
+>>>>>>> 22f93a40ad3a69e8eedc5b3bdbe66db98f20eee2
