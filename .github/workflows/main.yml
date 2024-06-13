@@ -53,5 +53,5 @@ jobs:
              sudo docker stop back-container
              sudo docker rm back-container
              sudo docker build -t tdb .
-             sudo docker create --name back-container -p 80:8080 tdb:latest
+             sudo docker create --name back-container -p 80:4040 tdb:latest
              sudo docker start back-container
