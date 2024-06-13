@@ -21,14 +21,14 @@ jobs:
     - name: 해당 브런치로 체크아웃
       uses: actions/checkout@v2
 
-    - name: 노드 설치
-      uses: actions/setup-node@v1
+    - uses: actions/setup-java@v2
       with:
-        node-version: 14
-
-    - name: Install dependencies
-      run: npm install
-
+        distribution: 'build'
+        java-version: '17'
+        
+    - name: Grant execute
+      run: chmod +x gradlew
+      
     - name: Build
       run: |
         echo Build.
@@ -42,7 +42,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Deploy to Lightsail
-      uses: orderabbit/store24H-front@v1
+      uses: orderabbit/store24H-back@v1
       with:
         host: ${{ secrets.LIGHTSAIL_HOST }}
         username: ${{ secrets.LIGHTSAIL_USERNAME }}
@@ -51,11 +51,11 @@ jobs:
         strip_components: 1
         target: '/home/ubuntu/{project-name}'
         script: |
-          cd /home/ubuntu/store24H-front
+          cd /home/ubuntu/store24H-back
           # 다음에 artifact 사용 가능
           echo $artifact
-          sudo docker stop front-container
-          sudo docker rm front-container
-          sudo docker build -t tdf .
-          sudo docker create --name front-container -p 80:80 tdf:latest
-          sudo docker start front-container
+          sudo docker stop back-container
+          sudo docker rm back-container
+          sudo docker build -t tdb .
+          sudo docker create --name back-container -p 80:8080 tdb:latest
+          sudo docker start back-container
