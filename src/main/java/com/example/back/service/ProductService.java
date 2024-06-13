@@ -5,6 +5,7 @@ import com.example.back.dto.response.product.DeleteProductResponseDto;
 import com.example.back.dto.response.product.ListProductResponseDto;
 import com.example.back.dto.response.product.SaveProductResponseDto;
 import com.example.back.dto.response.product.SearchProductResponseDto;
+import com.example.back.entity.ProductEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
