@@ -38,8 +38,7 @@ public class ProductServiceImplement implements ProductService {
 
     @Override
     public ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword) {
-        String certificationCodes = "GS,CU,세븐일레븐";
-        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=100&certification=" + certificationCodes;
+        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=100";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", CLIENT_ID);
