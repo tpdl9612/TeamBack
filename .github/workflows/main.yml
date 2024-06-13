@@ -21,8 +21,8 @@ jobs:
 
        - uses: actions/setup-java@v2
          with:
-         distribution: 'build'
-         java-version: '17'
+           distribution: 'build'
+           java-version: '17'
 
        - name: Grant execute
          run: chmod +x gradlew
