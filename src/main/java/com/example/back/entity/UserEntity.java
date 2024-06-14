@@ -50,6 +50,8 @@ public class UserEntity {
         this.role = "ROLE_USER";
     }
 
+
+
     public void setNickname(String nickname){
         this.nickname = nickname;
     }

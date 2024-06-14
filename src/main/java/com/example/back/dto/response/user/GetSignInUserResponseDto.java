@@ -13,8 +13,8 @@ public class GetSignInUserResponseDto extends ResponseDto {
 
     private String userId;
     private String email;
+    private String password;
     private String nickname;
-//    private String phoneNumber;
     private String profileImage;
 
     private GetSignInUserResponseDto(UserEntity userEntity){
@@ -23,7 +23,7 @@ public class GetSignInUserResponseDto extends ResponseDto {
         this.email = userEntity.getEmail();
         this.nickname = userEntity.getNickname();
         this.profileImage = userEntity.getProfileImage();
-//        this.phoneNumber = userEntity.getPhoneNumber();
+        this.password = userEntity.getPassword();
     }
 
     public static ResponseEntity<GetSignInUserResponseDto> success(UserEntity userEntity){

@@ -41,9 +41,7 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public ResponseEntity<? super GetSignInUserResponseDto> getSignInUser(String userId) {
-
         UserEntity userEntity = null;
-
         try {
             userEntity = userRepository.findByUserId(userId);
             if (userEntity == null) return GetSignInUserResponseDto.notExistUser();
