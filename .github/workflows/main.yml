@@ -27,7 +27,9 @@ jobs:
           distribution: 'adopt'
 
       - name: 권한
-        run: chmod +x gradlew
+        run: |
+          chmod +x gradlew
+          ls
 
       - name: 빌드
         run: |
@@ -40,20 +42,4 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           
-      - name: Deploy to Lightsail
-        uses: orderabbit/store24H-back@v1
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{ secrets.LIGHTSAIL_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: '*'
-          strip_components: 1
-          target: '/home/ubuntu/{project-name}'
-          script: |
-            cd /home/ubuntu/store24H-back
-            # 다음에 artifact 사용 가능
-            sudo docker stop back-container
-            sudo docker rm back-container
-            sudo docker build -t tdb .
-            sudo docker create --name back-container -p 80:4040 tdb:latest
-            sudo docker start back-container   
+      
