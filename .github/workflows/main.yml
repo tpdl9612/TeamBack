@@ -29,7 +29,13 @@ jobs:
       - name: 권한
         run: |
           chmod +x gradlew
-          ls
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+          
 
       - name: 빌드
         run: |
