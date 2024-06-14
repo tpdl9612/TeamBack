@@ -32,13 +32,13 @@ jobs:
           ./gradlew clean build
 
       - name: AWS 인증하기
-        uses: aws-actions/configure-aws-credentials@4
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Deploy to Lightsail
-        uses: orderabbit/store24H-back@1
+        uses: orderabbit/store24H-back@v1
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USERNAME }}
