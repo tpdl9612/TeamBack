@@ -43,6 +43,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           
-      - name: Deploy to Lightsail
-        uses: orderabbit/store24H-back@v1
+      - name: Deploy to prod
+        uses: orderabbit/store24H-back@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }} # EC2 퍼블릭 IPv4 DNS
+          username: ubuntu
+          key: ${{  secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            sudo docker ps
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker run -d -p 8082:8082 ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker image prune -f
         
