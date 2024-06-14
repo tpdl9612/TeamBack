@@ -49,6 +49,8 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }} # EC2 퍼블릭 IPv4 DNS
           username: ubuntu
           key: ${{  secrets.LIGHTSAIL_SSH_KEY }}
+          source: '*'
+          strip_components: 1
           script: |
             sudo docker ps
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
