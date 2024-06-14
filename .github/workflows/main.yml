@@ -32,7 +32,7 @@ jobs:
           ./gradlew clean build
 
       - name: AWS 인증하기
-        uses: aws-actions/configure-aws-credentials@1
+        uses: aws-actions/configure-aws-credentials@2
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
