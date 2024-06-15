@@ -45,11 +45,7 @@ jobs:
           
       - name: Deploy to prod
         uses: orderabbit/store24H-back@v1
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }} # EC2 퍼블릭 IPv4 DNS
-          username: ubuntu
-          key: ${{  secrets.LIGHTSAIL_SSH_KEY }}
-          source: '*'
+      
           strip_components: 1
           
         
