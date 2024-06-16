@@ -64,8 +64,8 @@ jobs:
 
       - name: Prepare app directory and start application
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app"
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "pkill -f 'java -jar' || true && nohup java -jar /home/${{ secrets.LIGHTSAIL_USER }}/app/*.jar > /home/${{ secrets.LIGHTSAIL_USER }}/app/app.log 2>&1 &"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "pkill -f 'java -jar' || true && nohup java -jar /home/${{ secrets.LIGHTSAIL_USER }}/app/*.jar > /home/${{ secrets.LIGHTSAIL_USER }}/app/app.log 2>&1 &"
 
       - name: Create app directory if not exists
         run: |
