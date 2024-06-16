@@ -49,24 +49,20 @@ jobs:
         
       - name: Add SSH key
         run: |
-          echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > key.pem
-          chmod 600 key.pem
-          
-      - name: Add remote host to known_hosts
-        run: |
-          mkdir -p ~/.ssh
+          echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > lightsail.pem
+          chmod 600 lightsail.pem
 
-      - name: Transfer JAR files to Lightsail
+      - name: Copy build files to Lightsail
         run: |
-
-      - name: Prepare app directory and start application
+          scp -i lightsail.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
+  
+      - name: Deploy on Lightsail
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app"
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "pkill -f 'java -jar' || true && nohup java -jar /home/${{ secrets.LIGHTSAIL_USER }}/app/*.jar > /home/${{ secrets.LIGHTSAIL_USER }}/app/app.log 2>&1 &"
-
-      - name: Start application
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "cd /home/${{ secrets.LIGHTSAIL_USER }}/app && pkill -f 'java -jar' || true && nohup java -jar *.jar > app.log 2>&1 &"
+          ssh -i lightsail.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
+          cd /home/${{ secrets.LIGHTSAIL_USER }}/app
+          # Add your deployment script here, e.g., restarting services, running migrations, etc.
+          pkill -f 'java -jar' || true
+          nohup java -jar *.jar > app.log 2>&1 &lication
 
 
           
