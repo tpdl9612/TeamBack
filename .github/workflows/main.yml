@@ -64,5 +64,3 @@ jobs:
           cd /home/${{ secrets.LIGHTSAIL_USER }}/app
           pkill -f 'java -jar' || true
           nohup java -jar *.jar > app.log 2>&1 &
-    
-          
