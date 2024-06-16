@@ -55,16 +55,6 @@ jobs:
       - name: Add remote host to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.LIGHTSAIL_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Create app directory if not exists
-        run: |
-          scp -i key.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
-          ssh -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app"
-          cd /home/${{ secrets.LIGHTSAIL_USER }}/app
-          pkill -f 'java -jar' || true
-          nohup java -jar *.jar > app.log 2>&1 &
-    
-
+  
 
           
