@@ -54,11 +54,11 @@ jobs:
 
       - name: Copy build files to Lightsail
         run: |
-          scp -i lightsail.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
+          scp -o StrictHostKeyChecking=no -i lightsail.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
   
       - name: Deploy on Lightsail
         run: |
-          ssh -i lightsail.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i lightsail.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
           cd /home/${{ secrets.LIGHTSAIL_USER }}/app
           # Add your deployment script here, e.g., restarting services, running migrations, etc.
           pkill -f 'java -jar' || true
