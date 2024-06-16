@@ -53,3 +53,19 @@ jobs:
         run: |
           echo "Deploying version ${{ steps.get_latest_tag.outputs.latest_tag }}"
         
+      - name: Add SSH key
+        run: |
+          echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > lightsail.pem
+          chmod 600 key.pem
+
+      - name: Create app directory if not exists
+        run: |
+          scp -i lightsail.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
+          ssh -i lightsail.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app"
+          cd /home/${{ secrets.LIGHTSAIL_USER }}/app
+          pkill -f 'java -jar' || true
+          nohup java -jar *.jar > app.log 2>&1 &
+    
+
+
+          
