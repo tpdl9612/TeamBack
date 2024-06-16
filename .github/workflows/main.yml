@@ -55,12 +55,12 @@ jobs:
       - name: Add remote host to known_hosts
         run: |
           mkdir -p ~/.ssh
-          # ssh-keyscan -H ${{ secrets.LIGHTSAIL_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.LIGHTSAIL_HOST }} >> ~/.ssh/known_hosts
 
       - name: Create app directory if not exists
         run: |
-          scp -o StrictHostKeyChecking=no -i key.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app ;
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app" ;
+          scp -o StrictHostKeyChecking=no -i key.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} "mkdir -p /home/${{ secrets.LIGHTSAIL_USER }}/app"
           cd /home/${{ secrets.LIGHTSAIL_USER }}/app
           pkill -f 'java -jar' || true
           nohup java -jar *.jar > app.log 2>&1 &
