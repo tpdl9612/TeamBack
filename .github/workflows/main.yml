@@ -43,17 +43,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           
-      - name: Deploy to prod
-        uses: orderabbit/store24H-back@v1
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }} # EC2 퍼블릭 IPv4 DNS
-          username: ubuntu
-          key: ${{  secrets.LIGHTSAIL_SSH_KEY }}
-          source: '*'
-          strip_components: 1
-          script: |
-            sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
-            sudo docker run -d -p 8082:8082 ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
-            sudo docker image prune -f
+      - name: Update latest tag
+        run: |
+          git tag -f $LATEST_TAG
+          LATEST_TAG=${{ steps.get_latest_tag.outputs.latest_tag }}
+          git push origin $LATEST_TAG --force
+
+      - name: Deploy
+        run: |
+          echo "Deploying version ${{ steps.get_latest_tag.outputs.latest_tag }}"
         
