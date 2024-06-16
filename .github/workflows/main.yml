@@ -51,6 +51,7 @@ jobs:
         run: |
           echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > key.pem
           chmod 600 key.pem
+          ls -l key.pem
           
       - name: Add remote host to known_hosts
         run: |
