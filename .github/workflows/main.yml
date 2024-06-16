@@ -51,18 +51,13 @@ jobs:
         run: |
           echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > key.pem
           chmod 600 key.pem
-
           
       - name: Add remote host to known_hosts
         run: |
           mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -H ${{ secrets.LIGHTSAIL_HOST }} >> ~/.ssh/known_hosts
 
       - name: Transfer JAR files to Lightsail
         run: |
-          cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-
           scp -o StrictHostKeyChecking=no -i key.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
 
       - name: Prepare app directory and start application
