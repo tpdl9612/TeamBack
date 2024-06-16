@@ -49,7 +49,7 @@ jobs:
         
       - name: Add SSH key
         run: |
-          echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > lightsail.pem
+          echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > key.pem
           chmod 600 key.pem
 
       - name: Create app directory if not exists
