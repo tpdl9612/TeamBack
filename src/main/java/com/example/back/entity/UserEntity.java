@@ -28,6 +28,7 @@ public class UserEntity {
     private String nickname;
     private String profileImage;
     private String provider;
+    private boolean socialUser;
     private String type;
     private String role;
 
@@ -36,6 +37,7 @@ public class UserEntity {
         this.password = dto.getPassword();
         this.email = dto.getEmail();
         this.nickname = dto.getNickname();
+        this.socialUser = false;
         this.type = "app";
         this.role = "ROLE_USER";
     }
@@ -46,11 +48,10 @@ public class UserEntity {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.socialUser = true;
         this.type = type;
         this.role = "ROLE_USER";
     }
-
-
 
     public void setNickname(String nickname){
         this.nickname = nickname;
