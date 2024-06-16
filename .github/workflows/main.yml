@@ -60,6 +60,7 @@ jobs:
 
       - name: Transfer JAR files to Lightsail
         run: |
+          ls -la ~/.ssh
           scp -o StrictHostKeyChecking=no -i ~/.ssh/key.pem -r build/libs/*.jar ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/${{ secrets.LIGHTSAIL_USER }}/app
 
       - name: Prepare app directory and start application
