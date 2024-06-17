@@ -1,4 +1,4 @@
-package com.example.back.dto.request.product;
+package com.example.back.dto.request.cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaveProductRequestDto {
+public class SaveCartRequestDto {
 
     private Long productId;
     private String title;

@@ -1,18 +1,17 @@
 package com.example.back.service;
 
-import com.example.back.dto.request.product.SaveProductRequestDto;
-import com.example.back.dto.response.product.DeleteProductResponseDto;
-import com.example.back.dto.response.product.ListProductResponseDto;
-import com.example.back.dto.response.product.SaveProductResponseDto;
-import com.example.back.dto.response.product.SearchProductResponseDto;
-import com.example.back.entity.ProductEntity;
+import com.example.back.dto.request.product.PatchProductRequestDto;
+import com.example.back.dto.request.product.PostProductRequestDto;
+import com.example.back.dto.request.product.PostReviewRequestDto;
+import com.example.back.dto.response.product.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
-@Service
 public interface ProductService {
-    ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword);
-    ResponseEntity<? super SaveProductResponseDto> saveProducts(SaveProductRequestDto dto, String userId);
-    ResponseEntity<? super ListProductResponseDto> getUserCartList(String userId);
-    ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId);
+    ResponseEntity<? super GetProductResponseDto> getProduct(String productId);
+    ResponseEntity<? super GetReviewResponseDto> getReviewList(String productId);
+    ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String searchWord, String preSearchWord);
+    ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String userId);
+    ResponseEntity<? super PatchProductResponseDto> patchProduct(PatchProductRequestDto dto, String productId, String userId);
+    ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String productId, String userId);
+    ResponseEntity<? super DeleteProductResponseDto> deleteProduct(String productId, String userId);
 }

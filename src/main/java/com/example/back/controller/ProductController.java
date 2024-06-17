@@ -1,51 +1,83 @@
 package com.example.back.controller;
 
-import com.example.back.dto.request.product.SaveProductRequestDto;
-import com.example.back.dto.response.product.DeleteProductResponseDto;
-import com.example.back.dto.response.product.ListProductResponseDto;
-import com.example.back.dto.response.product.SaveProductResponseDto;
-import com.example.back.dto.response.product.SearchProductResponseDto;
+import com.example.back.dto.request.product.PatchProductRequestDto;
+import com.example.back.dto.request.product.PostProductRequestDto;
+import com.example.back.dto.request.product.PostReviewRequestDto;
+import com.example.back.dto.response.product.*;
 import com.example.back.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/product")
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/search")
-    public ResponseEntity<? super SearchProductResponseDto> searchProducts(
-            @RequestParam String keyword) {
-        ResponseEntity<? super SearchProductResponseDto> response = productService.searchProductsFromApi(keyword);
-        return response;
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<? super SaveProductResponseDto> saveProduct(
-            @RequestBody SaveProductRequestDto dto,
-            @AuthenticationPrincipal String userId) {
-        ResponseEntity<? super SaveProductResponseDto> response = productService.saveProducts(dto, userId);
-        return response;
-    }
-
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<? super ListProductResponseDto> getUserProductList(
-            @PathVariable("userId") String userId
+    @PostMapping("")
+    public ResponseEntity<? super PostProductResponseDto> postProduct(
+            @RequestBody @Valid PostProductRequestDto requestBody,
+            @AuthenticationPrincipal String userId
     ) {
-        ResponseEntity<? super ListProductResponseDto> response = productService.getUserCartList(userId);
+        ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, userId);
         return response;
     }
 
-    @DeleteMapping("/delete/{productId}")
+    @PostMapping("/{productId}/review")
+    public ResponseEntity<? super PostReviewResponseDto> postReview(
+            @RequestBody @Valid PostReviewRequestDto requestBody,
+            @PathVariable("productId") String productId,
+            @AuthenticationPrincipal String userId
+    ) {
+        ResponseEntity<? super PostReviewResponseDto> response = productService.postReview(requestBody, productId, userId);
+        return response;
+    }
+
+    @GetMapping("/{productId}/comment-list")
+    public ResponseEntity<? super GetReviewResponseDto> getCommentList(
+            @PathVariable("productId") String produtId
+    ) {
+        ResponseEntity<? super GetReviewResponseDto> reponse = productService.getReviewList(produtId);
+        return reponse;
+    }
+
+    @GetMapping(value = {"/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}"})
+    public ResponseEntity<? super SearchProductResponseDto> getSearchBoardList(
+            @PathVariable("searchWord") String searchWord,
+            @PathVariable(value = "preSearchWord", required = false) String preSearchWord
+    ){
+        ResponseEntity<? super SearchProductResponseDto> response = productService.getSearchProductList(searchWord, preSearchWord);
+        return response;
+    }
+
+    @GetMapping("/detail/{productId}")
+    public ResponseEntity<? super GetProductResponseDto> getProduct(
+            @PathVariable("productId") String productId
+    ) {
+        ResponseEntity<? super GetProductResponseDto> response = productService.getProduct(productId);
+        return response;
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<? super PatchProductResponseDto> patchProduct(
+            @RequestBody @Valid PatchProductRequestDto requestBody,
+            @PathVariable("productId") String productId,
+            @AuthenticationPrincipal String userId
+    ) {
+        ResponseEntity<? super PatchProductResponseDto> response = productService.patchProduct(requestBody, productId, userId);
+        return response;
+    }
+
+    @DeleteMapping("/{productId}")
     public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(
-            @PathVariable("productId") Long productId
+            @PathVariable("productId") String productId,
+            @AuthenticationPrincipal String userId
     ) {
-        ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId);
+        ResponseEntity<? super DeleteProductResponseDto> response = productService.deleteProduct(productId, userId);
         return response;
     }
 }

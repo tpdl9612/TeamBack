@@ -8,20 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @Getter
-public class SaveProductResponseDto extends ResponseDto {
+public class PostProductResponseDto extends ResponseDto {
 
-    public SaveProductResponseDto() {
+    private PostProductResponseDto(){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-    public static ResponseEntity<SaveProductResponseDto> success(){
-        SaveProductResponseDto responseBody = new SaveProductResponseDto();
+    public static ResponseEntity<PostProductResponseDto> success(){
+        PostProductResponseDto responseBody = new PostProductResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-    }
-
-    public static ResponseEntity<ResponseDto> duplicatedProduct(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_PRODUCT, ResponseMessage.DUPLICATED_PRODUCT);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
     }
 
     public static ResponseEntity<ResponseDto> notExistUser(){
