@@ -25,5 +25,5 @@ public interface ResponseCode {
     String DUPLICATED_TITLE = "DT";
     String DUPLICATED_PRODUCT = "DP";
     String DUPLICATED_ORDER = "DO";
-    String DUPLECATED_PHONE_NUMBER = "DPN";
+    String EMPTY_ORDER = "EO";
 }

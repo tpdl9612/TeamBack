@@ -14,8 +14,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "product")
-@Table(name = "product")
+@Entity(name = "cart")
+@Table(name = "cart")
 public class ProductEntity {
     @Id
     @Column(name = "product_id")
