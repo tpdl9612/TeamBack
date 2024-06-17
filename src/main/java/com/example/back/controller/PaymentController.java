@@ -1,6 +1,9 @@
 package com.example.back.controller;
 
+import com.example.back.dto.request.order.SaveOrderListRequestDto;
 import com.example.back.dto.response.payment.PaymentResponseDto;
+import com.example.back.dto.response.order.SaveOrderListResponseDto;
+import com.example.back.service.OrderService;
 import com.example.back.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final OrderService orderService;
 
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -52,6 +56,12 @@ public class PaymentController {
     @PostMapping("/savePaymentInfo")
     public ResponseEntity<? super PaymentResponseDto> savePaymentInfo(@RequestBody JSONObject paymentInfo) {
         ResponseEntity<? super PaymentResponseDto> response = paymentService.savePaymentInfo(paymentInfo);
+        return response;
+    }
+
+    @PostMapping("/saveOrderInfo")
+    public ResponseEntity<? super SaveOrderListResponseDto> saveOrderInfo(@RequestBody SaveOrderListRequestDto requestBody) {
+        ResponseEntity<? super SaveOrderListResponseDto> response = orderService.saveOrderInfo(requestBody);
         return response;
     }
 }

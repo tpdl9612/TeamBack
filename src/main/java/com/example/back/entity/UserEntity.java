@@ -56,8 +56,4 @@ public class UserEntity {
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
-
-    public void setProfileImage(String profileImage){
-        this.profileImage = profileImage;
-    }
 }
