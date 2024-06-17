@@ -1,154 +1,188 @@
 package com.example.back.service.implement;
 
-import com.example.back.dto.request.product.SaveProductRequestDto;
+import com.example.back.dto.request.product.PatchProductRequestDto;
+import com.example.back.dto.request.product.PostProductRequestDto;
+import com.example.back.dto.request.product.PostReviewRequestDto;
 import com.example.back.dto.response.ResponseDto;
-import com.example.back.dto.response.product.DeleteProductResponseDto;
-import com.example.back.dto.response.product.ListProductResponseDto;
-import com.example.back.dto.response.product.SaveProductResponseDto;
-import com.example.back.dto.response.product.SearchProductResponseDto;
+import com.example.back.dto.response.product.*;
+import com.example.back.entity.ImageEntity;
 import com.example.back.entity.ProductEntity;
-import com.example.back.repository.ProductRepository;
-import com.example.back.repository.UserRepository;
+import com.example.back.entity.ProductListViewEntity;
+import com.example.back.entity.ReviewEntity;
+import com.example.back.repository.*;
+import com.example.back.repository.resultSet.GetProductResultSet;
+import com.example.back.repository.resultSet.GetReviewListResultSet;
 import com.example.back.service.ProductService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImplement implements ProductService {
 
-    private final String CLIENT_ID = "yHnbTL8e5WJbijzhlTJC";
-    private final String CLIENT_SECRET = "zALwPNV7B6";
-
-    private final RestTemplate restTemplate;
-    private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final ProductListViewRepository productListViewRepository;
+    private final ReviewRepository reviewRepository;
+    private final ImageRepository imageRepository;
 
     @Override
-    public ResponseEntity<? super SearchProductResponseDto> searchProductsFromApi(String keyword) {
-        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + keyword + "&display=100";
+    public ResponseEntity<? super GetProductResponseDto> getProduct(String productId) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Naver-Client-Id", CLIENT_ID);
-        headers.set("X-Naver-Client-Secret", CLIENT_SECRET);
+        GetProductResultSet resultSet = null;
+        List<ImageEntity> imageEntities = new ArrayList<>();
 
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        try {
+            resultSet = productRepository.getProduct(productId);
+            if (resultSet == null) return GetProductResponseDto.notExistProduct();
+            imageEntities = imageRepository.findByProductId(productId);
 
-        ResponseEntity<NaverResponse> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, NaverResponse.class);
-        NaverResponse naverResponse = responseEntity.getBody();
-
-        if (naverResponse != null && naverResponse.getItems() != null) {
-            List<ProductEntity> productEntities = naverResponse.getItems().stream().map(item -> {
-                if ("네이버".equals(item.getMallName())) {
-                    ProductEntity product = new ProductEntity();
-                    product.setProductId(item.getProductId());
-                    product.setTitle(removeHtmlTags(item.getTitle()));
-                    product.setLink(item.getLink());
-                    product.setImage(item.getImage());
-                    product.setLowPrice(item.getLprice());
-                    product.setCategory1(item.getCategory1());
-                    product.setCategory2(item.getCategory2());
-                    product.setMallName(item.getMallName());
-                    return product;
-                }
-                return null;
-            }).filter(Objects::nonNull).collect(Collectors.toList());
-            return SearchProductResponseDto.success(productEntities);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
         }
-        return SearchProductResponseDto.fail();
+        return GetProductResponseDto.success(resultSet, imageEntities);
     }
 
     @Override
-    public ResponseEntity<? super SaveProductResponseDto> saveProducts(SaveProductRequestDto dto, String userId) {
-        try {
-            boolean existedUser = userRepository.existsByUserId(userId);
-            if (!existedUser) return SaveProductResponseDto.notExistUser();
+    public ResponseEntity<? super GetReviewResponseDto> getReviewList(String productId) {
 
-            ProductEntity entity = productRepository.findByProductId(dto.getProductId());
-            if(entity != null) {
-                System.out.println(dto.getProductId());
-                System.out.println(entity.getProductId());
-                if (entity.getProductId().equals(dto.getProductId())) return SaveProductResponseDto.duplicatedProduct();
-            }
+        List<GetReviewListResultSet> resultSets = new ArrayList<>();
+
+        try {
+            boolean existedProduct = productRepository.existsByProductId(productId);
+            if (!existedProduct) return GetReviewResponseDto.notExistProduct();
+
+            resultSets = reviewRepository.getReviewList(productId);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetReviewResponseDto.success(resultSets);
+    }
+
+    @Override
+    public ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String searchWord, String preSearchWord) {
+        List<ProductListViewEntity> productListViewEntities = new ArrayList<>();
+
+        try{
+            productListViewEntities = productListViewRepository.findByCategory1ContainingOrCategory2Containing(searchWord, searchWord);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return SearchProductResponseDto.success(productListViewEntities);
+    }
+
+    @Override
+    public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String userId) {
+        try {
+
+            boolean existedUserId = userRepository.existsByUserId(userId);
+            if (!existedUserId) return PostProductResponseDto.notExistUser();
             ProductEntity productEntity = new ProductEntity(dto, userId);
+            productRepository.save(productEntity);
+
+            String productId = productEntity.getProductId();
+            List<String> boardImageList = dto.getProductImageList();
+            List<ImageEntity> imageEntities = new ArrayList<>();
+
+            for (String image : boardImageList) {
+                ImageEntity imageEntity = new ImageEntity(productId, image, userId);
+                imageEntities.add(imageEntity);
+            }
+            imageRepository.saveAll(imageEntities);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PostProductResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super PatchProductResponseDto> patchProduct(PatchProductRequestDto dto, String productId, String userId) {
+        try{
+            ProductEntity productEntity = productRepository.findByProductId(productId);
+            if(productEntity == null) return PatchProductResponseDto.notExistProduct();
+
+            boolean existedUser = userRepository.existsByUserId(userId);
+            if(!existedUser) return PatchProductResponseDto.notExistUser();
+
+            String writerId = productEntity.getUserId();
+            boolean isWriter = writerId.equals(userId);
+            if(!isWriter) return PatchProductResponseDto.notPermission();
+
+            productEntity.patchBoard(dto);
+            productRepository.save(productEntity);
+
+            imageRepository.deleteByProductId(productId);
+            List<String> boardImageList = dto.getProductImageList();
+            List<ImageEntity> imageEntities = new ArrayList<>();
+
+            for(String image: boardImageList) {
+                ImageEntity imageEntity = new ImageEntity(productId, image, userId);
+                imageEntities.add(imageEntity);
+            }
+
+            imageRepository.saveAll(imageEntities);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PatchProductResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String productId, String userId) {
+        try {
+            ProductEntity productEntity = productRepository.findByProductId(productId);
+            if (productEntity == null) return PostReviewResponseDto.notExistProduct();
+
+            boolean existUser = userRepository.existsByUserId(userId);
+            if (!existUser) return PostReviewResponseDto.notExistUser();
+
+            ReviewEntity reviewEntity = new ReviewEntity(dto, productId, userId);
+            reviewRepository.save(reviewEntity);
+
             productRepository.save(productEntity);
 
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return SaveProductResponseDto.success();
+        return PostReviewResponseDto.success();
     }
 
     @Override
-    public ResponseEntity<? super ListProductResponseDto> getUserCartList(String userId) {
-        List<ProductEntity> cartListViewEntities = new ArrayList<>();
-        try {
+    public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(String productId, String userId) {
+        try{
+
             boolean existedUser = userRepository.existsByUserId(userId);
-            if (!existedUser) return ListProductResponseDto.notExistUser();
+            if(!existedUser) return DeleteProductResponseDto.notExistedUser();
 
-            cartListViewEntities = productRepository.findByUserId(userId);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return ResponseDto.databaseError();
-        }
-        return ListProductResponseDto.success(cartListViewEntities);
-    }
-
-    @Override
-    public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(Long productId) {
-        try {
             ProductEntity productEntity = productRepository.findByProductId(productId);
-            if (productEntity == null) return DeleteProductResponseDto.notExistedProduct();
+            if(productEntity == null) return DeleteProductResponseDto.notExistedProduct();
 
+            String writerId = productEntity.getUserId();
+            boolean isWriter = writerId.equals(userId);
+            if(!isWriter) return DeleteProductResponseDto.notPermission();
+
+            imageRepository.deleteByProductId(productId);
+            reviewRepository.deleteByProductId(productId);
             productRepository.delete(productEntity);
-        } catch (Exception exception) {
+
+        }catch (Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
         return DeleteProductResponseDto.success();
-    }
-
-
-    private static class NaverResponse {
-        private List<Item> items;
-
-        public List<Item> getItems() {
-            return items;
-        }
-
-        public void setItems(List<Item> items) {
-            this.items = items;
-        }
-    }
-
-    @Getter
-    @Setter
-    private static class Item {
-        private Long productId;
-        private String title;
-        private String link;
-        private String image;
-        private String lprice;
-        private int count;
-        private String category1;
-        private String category2;
-        private String mallName;
-    }
-
-    private String removeHtmlTags(String html) {
-        return html.replaceAll("\\<.*?\\>", "");
     }
 }

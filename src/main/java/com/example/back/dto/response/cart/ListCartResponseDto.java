@@ -1,9 +1,9 @@
-package com.example.back.dto.response.product;
+package com.example.back.dto.response.cart;
 
 import com.example.back.common.ResponseCode;
 import com.example.back.common.ResponseMessage;
 import com.example.back.dto.response.ResponseDto;
-import com.example.back.entity.ProductEntity;
+import com.example.back.entity.CartEntity;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,17 +11,17 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class ListProductResponseDto extends ResponseDto {
+public class ListCartResponseDto extends ResponseDto {
 
-    private List<ProductEntity> items;
+    private List<CartEntity> items;
 
-    public ListProductResponseDto(List<ProductEntity> items) {
+    public ListCartResponseDto(List<CartEntity> items) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.items = items;
     }
 
-    public static ResponseEntity<ListProductResponseDto> success(List<ProductEntity> products){
-        ListProductResponseDto responseBody = new ListProductResponseDto(products);
+    public static ResponseEntity<ListCartResponseDto> success(List<CartEntity> products){
+        ListCartResponseDto responseBody = new ListCartResponseDto(products);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
@@ -30,8 +30,8 @@ public class ListProductResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 
-    public static ResponseEntity<ListProductResponseDto> fail(){
-        ListProductResponseDto responseBody = new ListProductResponseDto(null);
+    public static ResponseEntity<ListCartResponseDto> fail(){
+        ListCartResponseDto responseBody = new ListCartResponseDto(null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
     }
 }

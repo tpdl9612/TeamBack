@@ -2,11 +2,11 @@ package com.example.back.service.implement;
 
 import com.example.back.dto.response.ResponseDto;
 import com.example.back.dto.response.payment.PaymentResponseDto;
+import com.example.back.entity.CartEntity;
 import com.example.back.entity.PaymentEntity;
-import com.example.back.entity.ProductEntity;
+import com.example.back.repository.CartRepository;
 import com.example.back.repository.OrderListRepository;
 import com.example.back.repository.PaymentRepository;
-import com.example.back.repository.ProductRepository;
 import com.example.back.service.PaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -38,8 +38,8 @@ public class PaymentServiceImplement implements PaymentService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final PaymentRepository paymentRepository;
+    private final CartRepository cartRepository;
     private final OrderListRepository orderListRepository;
-    private final ProductRepository productRepository;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -120,7 +120,7 @@ public class PaymentServiceImplement implements PaymentService {
             return PaymentResponseDto.duplicatedOrder();
         }
         PaymentEntity paymentEntity = new PaymentEntity();
-        List<ProductEntity> productEntities = new ArrayList<>();
+        List<CartEntity> productEntities = new ArrayList<>();
         try {
             paymentEntity.setOrderId(orderId);
             paymentEntity.setCustomerId(customerId);
@@ -135,10 +135,10 @@ public class PaymentServiceImplement implements PaymentService {
             paymentRepository.save(paymentEntity);
 
             for (Long productId : productIds) {
-                Optional<ProductEntity> productEntityOptional = productRepository.findById(productId);
+                Optional<CartEntity> productEntityOptional = cartRepository.findById(productId);
                 productEntityOptional.ifPresent(productEntities::add);
             }
-            productRepository.deleteAll(productEntities);
+            cartRepository.deleteAll(productEntities);
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
