@@ -6,6 +6,7 @@ import com.example.back.dto.response.ResponseDto;
 import com.example.back.dto.response.user.*;
 import com.example.back.entity.UserEntity;
 import com.example.back.repository.UserRepository;
+import com.example.back.service.EmailService;
 import com.example.back.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,13 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImplement implements UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImplement.class);
 
@@ -112,5 +115,41 @@ public class UserServiceImplement implements UserService {
             return ResponseDto.databaseError();
         }
         return WithdrawalUserResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super PasswordRecoveryResponseDto> passwordRecovery(String email) {
+        try {
+
+            UserEntity userEntity = userRepository.findByEmail(email);
+            if (userEntity == null) return PasswordRecoveryResponseDto.notExistUser();
+
+            String temporaryPassword = generateTemporaryPassword();
+
+            userEntity.setPassword(passwordEncoder.encode(temporaryPassword));
+            userRepository.save(userEntity);
+
+            String changePasswordUrl = "http://localhost:3000/password";
+            String emailText = "임시 비밀번호는: " + temporaryPassword + " 입니다.\n" +
+                    "로그인 후 비밀번호를 변경해주세요.";
+            emailService.sendEmail(email, "임시 비밀번호", emailText);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PasswordRecoveryResponseDto.success();
+    }
+
+    private String generateTemporaryPassword() {
+        int length = 10;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder passwordBuilder = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            char randomChar = characters.charAt(random.nextInt(characters.length()));
+            passwordBuilder.append(randomChar);
+        }
+        return passwordBuilder.toString();
     }
 }

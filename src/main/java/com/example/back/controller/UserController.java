@@ -1,6 +1,7 @@
 package com.example.back.controller;
 
 import com.example.back.dto.request.user.ChangePasswordRequestDto;
+import com.example.back.dto.request.user.PasswordRecoveryRequestDto;
 import com.example.back.dto.request.user.PatchNicknameRequestDto;
 import com.example.back.dto.response.user.*;
 import com.example.back.service.UserService;
@@ -56,6 +57,13 @@ public class UserController {
     ) {
         ResponseEntity<? super WithdrawalUserResponseDto> response = userService.withdrawalUser(userId);
         return response;
+    }
+
+    @PostMapping("/recovery-password")
+    public ResponseEntity<? super PasswordRecoveryResponseDto> passwordRecovery(
+            @RequestBody @Valid PasswordRecoveryRequestDto dto
+    ) {
+        return userService.passwordRecovery(dto.getEmail());
     }
 
 }
