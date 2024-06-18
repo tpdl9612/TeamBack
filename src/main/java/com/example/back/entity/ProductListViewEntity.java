@@ -21,12 +21,11 @@ public class ProductListViewEntity {
     private String productId;
     private String title;
     private String content;
-    private String link;
     private String image;
     private String lowPrice;
     private String category1;
     private String category2;
-    private String writerId;
+    private String userId;
     private String writerNickname;
     private String writeDatetime;
 

@@ -17,7 +17,7 @@ public class GetProductResponseDto extends ResponseDto {
 
     private String productId;
     private String title;
-//    private String content;
+    private String content;
     private String link;
     private List<String> productImageList;
     private String lowPrice;
@@ -35,15 +35,13 @@ public class GetProductResponseDto extends ResponseDto {
             String boardImage =  imageEntity.getImage();
             productImageList.add(boardImage);
         }
-
         this.productId = resultSet.getProductId();
         this.title = resultSet.getTitle();
-//        this.content = resultSet.getContent();
+        this.content = resultSet.getContent();
         this.link = resultSet.getLink();
         this.productImageList = productImageList;
         this.writeDatetime = resultSet.getWriteDatetime();
-        this.writerId = resultSet.getWriterId();
-        this.writerNickname = resultSet.getWriterNickname();
+        this.writerId = resultSet.getUserId();
         this.lowPrice = resultSet.getLowPrice();
         this.category1 = resultSet.getCategory1();
         this.category2 = resultSet.getCategory2();

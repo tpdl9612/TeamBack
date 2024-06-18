@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ProductListViewRepository extends JpaRepository<ProductListViewEntity, Integer> {
-    List<ProductListViewEntity> findByOrderByWriteDatetimeDesc();
-    List<ProductListViewEntity> findByWriterIdOrderByWriteDatetimeDesc(String writerId);
     List<ProductListViewEntity> findByCategory1ContainingOrCategory2Containing(String category1, String category2);
 }

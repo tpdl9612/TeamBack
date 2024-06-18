@@ -20,10 +20,12 @@ public class ImageEntity {
     private String userId;
     private String productId;
     private String image;
+    private String imageType;
 
-    public ImageEntity(String productId, String image, String userId){
+    public ImageEntity(String productId, String image, String userId, String imageType){
         this.userId = userId;
         this.productId = productId;
         this.image = image;
+        this.imageType = imageType;
     }
 }

@@ -19,15 +19,15 @@ public class PostProductRequestDto {
     @NotBlank
     private String content;
     @NotBlank
-    private String image;
-    @NotBlank
-    private String link;
-    @NotBlank
     private String lowPrice;
+    @NotBlank
+    private String image;
     @NotBlank
     private String category1;
     @NotBlank
     private String category2;
 
     private List<String> productImageList;
+
+    private List<String> secondaryProductImageList;
 }

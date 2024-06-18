@@ -15,7 +15,6 @@ import java.util.List;
 public class ReviewListItem {
 
     private String nickname;
-    private String profileImage;
     private String writeDatetime;
     private String content;
 

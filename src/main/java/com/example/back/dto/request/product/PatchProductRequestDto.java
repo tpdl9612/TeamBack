@@ -16,10 +16,8 @@ public class PatchProductRequestDto {
     private String productId;
     @NotBlank
     private String title;
-    //    @NotBlank
-//    private String content;
     @NotBlank
-    private String link;
+    private String content;
     @NotBlank
     private String lowPrice;
     @NotBlank
@@ -30,4 +28,6 @@ public class PatchProductRequestDto {
     private String category2;
 
     private List<String> productImageList;
+
+    private List<String> secondaryProductImageList;
 }

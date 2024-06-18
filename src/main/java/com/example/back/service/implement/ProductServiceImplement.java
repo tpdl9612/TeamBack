@@ -82,21 +82,29 @@ public class ProductServiceImplement implements ProductService {
 
     @Override
     public ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String userId) {
-        try {
 
+        try {
             boolean existedUserId = userRepository.existsByUserId(userId);
             if (!existedUserId) return PostProductResponseDto.notExistUser();
             ProductEntity productEntity = new ProductEntity(dto, userId);
             productRepository.save(productEntity);
 
             String productId = productEntity.getProductId();
-            List<String> boardImageList = dto.getProductImageList();
+
+            List<String> productImageList = dto.getProductImageList();
             List<ImageEntity> imageEntities = new ArrayList<>();
 
-            for (String image : boardImageList) {
-                ImageEntity imageEntity = new ImageEntity(productId, image, userId);
+            for (String image : productImageList) {
+                ImageEntity imageEntity = new ImageEntity(productId, image, userId, "primary");
                 imageEntities.add(imageEntity);
             }
+
+            List<String> secondaryProductImageList = dto.getSecondaryProductImageList();
+            for (String image : secondaryProductImageList) {
+                ImageEntity imageEntity = new ImageEntity(productId, image, userId, "secondary");
+                imageEntities.add(imageEntity);
+            }
+
             imageRepository.saveAll(imageEntities);
 
         } catch (Exception exception) {
@@ -119,15 +127,21 @@ public class ProductServiceImplement implements ProductService {
             boolean isWriter = writerId.equals(userId);
             if(!isWriter) return PatchProductResponseDto.notPermission();
 
-            productEntity.patchBoard(dto);
+            productEntity.patchProduct(dto);
             productRepository.save(productEntity);
 
             imageRepository.deleteByProductId(productId);
-            List<String> boardImageList = dto.getProductImageList();
+            List<String> productImageList = dto.getProductImageList();
             List<ImageEntity> imageEntities = new ArrayList<>();
 
-            for(String image: boardImageList) {
-                ImageEntity imageEntity = new ImageEntity(productId, image, userId);
+            for(String image: productImageList) {
+                ImageEntity imageEntity = new ImageEntity(productId, image, userId, "primary");
+                imageEntities.add(imageEntity);
+            }
+
+            List<String> secondaryProductImageList = dto.getSecondaryProductImageList();
+            for (String image : secondaryProductImageList) {
+                ImageEntity imageEntity = new ImageEntity(productId, image, userId, "secondary");
                 imageEntities.add(imageEntity);
             }
 

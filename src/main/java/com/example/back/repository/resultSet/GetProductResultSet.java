@@ -7,8 +7,7 @@ public interface GetProductResultSet {
     String getContent();
     String getLink();
     String getWriteDatetime();
-    String getWriterId();
-    String getWriterNickname();
+    String getUserId();
     String getLowPrice();
     String getCategory1();
     String getCategory2();
