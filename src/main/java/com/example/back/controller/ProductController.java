@@ -73,7 +73,7 @@ public class ProductController {
         return response;
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/delete/{productId}")
     public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(
             @PathVariable("productId") String productId,
             @AuthenticationPrincipal String userId

@@ -24,7 +24,7 @@ public class PostProductRequestDto {
     private String category1;
     @NotBlank
     private String category2;
-    @NotBlank
+
     private List<String> productImageList;
 
     private List<String> secondaryProductImageList;
