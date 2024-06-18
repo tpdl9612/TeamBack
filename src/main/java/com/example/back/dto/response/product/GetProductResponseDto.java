@@ -18,41 +18,43 @@ public class GetProductResponseDto extends ResponseDto {
     private String productId;
     private String title;
     private String content;
-    private String link;
-    private List<String> productImageList;
     private String lowPrice;
     private String category1;
     private String category2;
     private String writeDatetime;
-    private String writerId;
-    private String writerNickname;
+    private String userId;
+    private List<String> productImageList;
+    private List<String> secondaryProductImageList;
 
-    public GetProductResponseDto(GetProductResultSet resultSet, List<ImageEntity> imageEntities){
+    public GetProductResponseDto(GetProductResultSet resultSet, List<ImageEntity> primaryImages, List<ImageEntity> secondaryImages) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-
-        List<String> productImageList = new ArrayList<>();
-        for(ImageEntity imageEntity: imageEntities){
-            String boardImage =  imageEntity.getImage();
-            productImageList.add(boardImage);
-        }
         this.productId = resultSet.getProductId();
         this.title = resultSet.getTitle();
         this.content = resultSet.getContent();
-        this.link = resultSet.getLink();
-        this.productImageList = productImageList;
-        this.writeDatetime = resultSet.getWriteDatetime();
-        this.writerId = resultSet.getUserId();
         this.lowPrice = resultSet.getLowPrice();
         this.category1 = resultSet.getCategory1();
         this.category2 = resultSet.getCategory2();
+        this.writeDatetime = resultSet.getWriteDatetime();
+        this.userId = resultSet.getUserId();
+
+        this.productImageList = new ArrayList<>();
+        this.secondaryProductImageList = new ArrayList<>();
+
+        for (ImageEntity imageEntity : primaryImages) {
+            this.productImageList.add(imageEntity.getImage());
+        }
+
+        for (ImageEntity imageEntity : secondaryImages) {
+            this.secondaryProductImageList.add(imageEntity.getImage());
+        }
     }
 
-    public static ResponseEntity<GetProductResponseDto> success(GetProductResultSet resultSet, List<ImageEntity> imageEntities){
-        GetProductResponseDto responseBody = new GetProductResponseDto(resultSet, imageEntities);
+    public static ResponseEntity<GetProductResponseDto> success(GetProductResultSet resultSet, List<ImageEntity> primaryImages, List<ImageEntity> secondaryImages) {
+        GetProductResponseDto responseBody = new GetProductResponseDto(resultSet, primaryImages, secondaryImages);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
-    public static ResponseEntity<ResponseDto> notExistProduct(){
+    public static ResponseEntity<ResponseDto> notExistProduct() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXISTED_PRODUCT, ResponseMessage.NOT_EXISTED_PRODUCT);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }

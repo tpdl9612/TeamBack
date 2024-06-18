@@ -21,12 +21,10 @@ public class PostProductRequestDto {
     @NotBlank
     private String lowPrice;
     @NotBlank
-    private String image;
-    @NotBlank
     private String category1;
     @NotBlank
     private String category2;
-
+    @NotBlank
     private List<String> productImageList;
 
     private List<String> secondaryProductImageList;

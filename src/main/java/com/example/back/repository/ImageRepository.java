@@ -17,4 +17,5 @@ public interface ImageRepository extends JpaRepository<ImageEntity, String> {
     @Transactional
     void deleteByUserId(String userId);
 
+    List<ImageEntity> findByProductIdAndImageType(String productId, String type);
 }
