@@ -7,7 +7,7 @@ import com.example.back.dto.response.product.*;
 import org.springframework.http.ResponseEntity;
 
 public interface ProductService {
-    ResponseEntity<? super GetProductResponseDto> getProduct(String productId);
+    ResponseEntity<? super GetProductResponseDto> getProduct(String productId, String type);
     ResponseEntity<? super GetReviewResponseDto> getReviewList(String productId);
     ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String searchWord, String preSearchWord);
     ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String userId);

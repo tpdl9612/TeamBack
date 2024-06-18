@@ -21,8 +21,6 @@ public class PatchProductRequestDto {
     @NotBlank
     private String lowPrice;
     @NotBlank
-    private String image;
-    @NotBlank
     private String category1;
     @NotBlank
     private String category2;

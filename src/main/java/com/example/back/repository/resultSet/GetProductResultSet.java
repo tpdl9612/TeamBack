@@ -5,7 +5,6 @@ public interface GetProductResultSet {
     String getProductId();
     String getTitle();
     String getContent();
-    String getLink();
     String getWriteDatetime();
     String getUserId();
     String getLowPrice();

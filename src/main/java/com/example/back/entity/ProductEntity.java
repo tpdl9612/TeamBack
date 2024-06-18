@@ -24,7 +24,7 @@ public class ProductEntity {
     private Long id;
     private String productId;
     private String title;
-    private String image;
+    private String content;
     private String writeDatetime;
     private String lowPrice;
     private String userId;
@@ -38,7 +38,7 @@ public class ProductEntity {
 
         this.productId = dto.getProductId();
         this.title = dto.getTitle();
-        this.image = dto.getImage();
+        this.content = dto.getContent();
         this.lowPrice = dto.getLowPrice();
         this.userId = userId;
         this.category1 = dto.getCategory1();
@@ -49,7 +49,7 @@ public class ProductEntity {
     public void patchProduct(PatchProductRequestDto dto) {
         this.productId = dto.getProductId();
         this.title = dto.getTitle();
-        this.image = dto.getImage();
+        this.content = dto.getContent();
         this.lowPrice = dto.getLowPrice();
         this.category1 = dto.getCategory1();
         this.category2 = dto.getCategory2();

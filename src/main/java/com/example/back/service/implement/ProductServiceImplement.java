@@ -31,21 +31,23 @@ public class ProductServiceImplement implements ProductService {
     private final ImageRepository imageRepository;
 
     @Override
-    public ResponseEntity<? super GetProductResponseDto> getProduct(String productId) {
+    public ResponseEntity<? super GetProductResponseDto> getProduct(String productId, String type) {
 
         GetProductResultSet resultSet = null;
-        List<ImageEntity> imageEntities = new ArrayList<>();
+        List<ImageEntity> primaryImages = new ArrayList<>();
+        List<ImageEntity> secondaryImages = new ArrayList<>();
 
         try {
             resultSet = productRepository.getProduct(productId);
             if (resultSet == null) return GetProductResponseDto.notExistProduct();
-            imageEntities = imageRepository.findByProductId(productId);
+            primaryImages = imageRepository.findByProductIdAndImageType(productId, "primary");
+            secondaryImages = imageRepository.findByProductIdAndImageType(productId, "secondary");
 
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetProductResponseDto.success(resultSet, imageEntities);
+        return GetProductResponseDto.success(resultSet, primaryImages, secondaryImages);
     }
 
     @Override
