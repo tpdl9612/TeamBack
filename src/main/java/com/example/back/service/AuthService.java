@@ -2,8 +2,12 @@ package com.example.back.service;
 
 import com.example.back.dto.request.auth.*;
 import com.example.back.dto.response.auth.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+
+@Service
 
 public interface AuthService {
 
