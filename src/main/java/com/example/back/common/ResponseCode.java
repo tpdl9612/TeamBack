@@ -25,7 +25,7 @@ public interface ResponseCode {
     String WRONG_PASSWORD = "WP";
     String DO_NOT_HAVE_PERMISSION = "NP";
 
-    String DUPLICATED_TITLE = "DT";
+    String DUPLICATED_PRODUCT_ID = "DPI";
     String DUPLICATED_PRODUCT = "DP";
     String DUPLICATED_ORDER = "DO";
     String EMPTY_ORDER = "EO";

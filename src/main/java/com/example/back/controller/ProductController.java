@@ -37,7 +37,7 @@ public class ProductController {
         return response;
     }
 
-    @GetMapping("/{productId}/comment-list")
+    @GetMapping("/{productId}/review-list")
     public ResponseEntity<? super GetReviewResponseDto> getCommentList(
             @PathVariable("productId") String produtId
     ) {
@@ -49,7 +49,7 @@ public class ProductController {
     public ResponseEntity<? super SearchProductResponseDto> getSearchBoardList(
             @PathVariable("searchWord") String searchWord,
             @PathVariable(value = "preSearchWord", required = false) String preSearchWord
-    ){
+    ) {
         ResponseEntity<? super SearchProductResponseDto> response = productService.getSearchProductList(searchWord, preSearchWord);
         return response;
     }

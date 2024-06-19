@@ -73,7 +73,7 @@ public class ProductServiceImplement implements ProductService {
         List<ProductListViewEntity> productListViewEntities = new ArrayList<>();
 
         try{
-            productListViewEntities = productListViewRepository.findByCategory1ContainingOrCategory2Containing(searchWord, searchWord);
+            productListViewEntities = productListViewRepository.findByCategory1ContainingOrCategory2ContainingOrCategory3Containing(searchWord, searchWord, searchWord);
 
         }catch (Exception exception){
             exception.printStackTrace();
@@ -88,6 +88,10 @@ public class ProductServiceImplement implements ProductService {
         try {
             boolean existedUserId = userRepository.existsByUserId(userId);
             if (!existedUserId) return PostProductResponseDto.notExistUser();
+
+            boolean existedProductId = productRepository.existsByProductId(dto.getProductId());
+            if(existedProductId) return PostProductResponseDto.duplicateProductId();
+
             ProductEntity productEntity = new ProductEntity(dto, userId);
             productRepository.save(productEntity);
 

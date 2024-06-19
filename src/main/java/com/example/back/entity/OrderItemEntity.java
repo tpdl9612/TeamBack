@@ -30,6 +30,7 @@ public class OrderItemEntity {
     private String totalPrice;
     private String category1;
     private String category2;
+    private String category3;
     private String count;
     private String userId;
 
@@ -41,6 +42,7 @@ public class OrderItemEntity {
         this.totalPrice = itemDto.getTotalPrice();
         this.category1 = itemDto.getCategory1();
         this.category2 = itemDto.getCategory2();
+        this.category3 = itemDto.getCategory3();
         this.count = itemDto.getCount();
         this.userId = userId;
     }

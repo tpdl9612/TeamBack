@@ -23,4 +23,9 @@ public class PostProductResponseDto extends ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
+
+    public static ResponseEntity<ResponseDto> duplicateProductId(){
+        ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_PRODUCT_ID, ResponseMessage.DUPLICATED_PRODUCT_ID);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
 }

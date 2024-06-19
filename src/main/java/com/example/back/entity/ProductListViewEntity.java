@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,12 +23,13 @@ public class ProductListViewEntity {
     private String productId;
     private String title;
     private String content;
-    private String image;
     private String lowPrice;
+    private List<String> titleImage;
+    private List<String> secondaryImage;
     private String category1;
     private String category2;
+    private String category3;
     private String userId;
-    private String writerNickname;
     private String writeDatetime;
 
 }

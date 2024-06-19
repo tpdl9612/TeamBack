@@ -21,6 +21,7 @@ public class GetProductResponseDto extends ResponseDto {
     private String lowPrice;
     private String category1;
     private String category2;
+    private String category3;
     private String writeDatetime;
     private String userId;
     private List<String> productImageList;
@@ -34,6 +35,7 @@ public class GetProductResponseDto extends ResponseDto {
         this.lowPrice = resultSet.getLowPrice();
         this.category1 = resultSet.getCategory1();
         this.category2 = resultSet.getCategory2();
+        this.category3 = resultSet.getCategory3();
         this.writeDatetime = resultSet.getWriteDatetime();
         this.userId = resultSet.getUserId();
 

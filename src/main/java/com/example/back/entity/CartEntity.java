@@ -27,6 +27,7 @@ public class CartEntity {
     private String lowPrice;
     private String category1;
     private String category2;
+    private String category3;
     private String count;
 
     public CartEntity(SaveCartRequestDto dto, String userId) {
@@ -38,6 +39,7 @@ public class CartEntity {
         this.lowPrice = dto.getLowPrice();
         this.category1 = dto.getCategory1();
         this.category2 = dto.getCategory2();
+        this.category3 = dto.getCategory3();
         this.count = dto.getCount();
     }
 }

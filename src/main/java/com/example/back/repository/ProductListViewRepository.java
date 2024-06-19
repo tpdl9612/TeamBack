@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ProductListViewRepository extends JpaRepository<ProductListViewEntity, Integer> {
-    List<ProductListViewEntity> findByCategory1ContainingOrCategory2Containing(String category1, String category2);
+    List<ProductListViewEntity> findByCategory1ContainingOrCategory2ContainingOrCategory3Containing(String searchWord, String preSearchWord, String thirdSearchWord);
 }
