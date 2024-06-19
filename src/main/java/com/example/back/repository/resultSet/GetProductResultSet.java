@@ -10,4 +10,5 @@ public interface GetProductResultSet {
     String getLowPrice();
     String getCategory1();
     String getCategory2();
+    String getCategory3();
 }

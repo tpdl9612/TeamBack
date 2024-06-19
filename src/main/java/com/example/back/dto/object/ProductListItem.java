@@ -19,11 +19,12 @@ public class ProductListItem {
     private String productId;
     private String title;
     private String content;
-    private String link;
-    private String image;
+    private List<String> titleImage;
+    private List<String> secondaryImage;
     private String lowPrice;
     private String category1;
     private String category2;
+    private String category3;
     private String userId;
     private String writeDatetime;
 
@@ -31,10 +32,12 @@ public class ProductListItem {
         this.productId = productListViewEntity.getProductId();
         this.title = productListViewEntity.getTitle();
         this.content = productListViewEntity.getContent();
-        this.image = productListViewEntity.getImage();
+        this.titleImage = productListViewEntity.getTitleImage();
+        this.secondaryImage = productListViewEntity.getSecondaryImage();
         this.lowPrice = productListViewEntity.getLowPrice();
         this.category1 = productListViewEntity.getCategory1();
         this.category2 = productListViewEntity.getCategory2();
+        this.category3 = productListViewEntity.getCategory3();
         this.userId = productListViewEntity.getUserId();
         this.writeDatetime = productListViewEntity.getWriteDatetime();
     }

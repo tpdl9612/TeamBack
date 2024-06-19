@@ -21,7 +21,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String> 
                             "P.user_id AS userId, " +
                             "P.low_price AS lowPrice, " +
                             "P.category1 AS category1, " +
-                            "P.category2 AS category2 " +
+                            "P.category2 AS category2, " +
+                            "P.category3 AS category3 " +
                             "FROM product AS P " +
                             "INNER JOIN user AS U " +
                             "ON P.user_id = U.user_id " +

@@ -30,6 +30,7 @@ public class ProductEntity {
     private String userId;
     private String category1;
     private String category2;
+    private String category3;
 
     public ProductEntity(PostProductRequestDto dto, String userId){
         Date now = Date.from(Instant.now());
@@ -43,6 +44,7 @@ public class ProductEntity {
         this.userId = userId;
         this.category1 = dto.getCategory1();
         this.category2 = dto.getCategory2();
+        this.category3 = dto.getCategory3();
         this.writeDatetime = writeDatetime;
     }
 
@@ -53,5 +55,6 @@ public class ProductEntity {
         this.lowPrice = dto.getLowPrice();
         this.category1 = dto.getCategory1();
         this.category2 = dto.getCategory2();
+        this.category3 = dto.getCategory3();
     }
 }
