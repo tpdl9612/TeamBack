@@ -21,7 +21,8 @@ public class AuthController {
 
     @PostMapping("/oauth-response")
     public void handleOAuthResponse(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
-        String redirectUrl = "http://localhost:3000?token=" + token;
+        //잘 안되면 롤백
+        String redirectUrl = "http://3.35.30.191:4040?token=" + token;
         response.sendRedirect(redirectUrl);
     }
 

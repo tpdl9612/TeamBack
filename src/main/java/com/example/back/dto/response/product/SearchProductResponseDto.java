@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class SearchProductResponseDto extends ResponseDto {
+public class  SearchProductResponseDto extends ResponseDto {
 
     private List<ProductListItem> searchList;
 
