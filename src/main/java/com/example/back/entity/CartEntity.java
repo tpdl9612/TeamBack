@@ -1,10 +1,7 @@
 package com.example.back.entity;
 
 import com.example.back.dto.request.cart.SaveCartRequestDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,8 @@ import java.util.List;
 @Table(name = "cart")
 public class CartEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name = "product_id")
     private Long productId;
     private String userId;
