@@ -45,12 +45,11 @@ public class ProductController {
         return reponse;
     }
 
-    @GetMapping(value = {"/search-list/{searchWord}", "/search-list/{searchWord}/{preSearchWord}"})
+    @GetMapping(value = {"/search"})
     public ResponseEntity<? super SearchProductResponseDto> getSearchBoardList(
-            @PathVariable("searchWord") String searchWord,
-            @PathVariable(value = "preSearchWord", required = false) String preSearchWord
+            @RequestParam String keyword
     ) {
-        ResponseEntity<? super SearchProductResponseDto> response = productService.getSearchProductList(searchWord, preSearchWord);
+        ResponseEntity<? super SearchProductResponseDto> response = productService.getSearchProductList(keyword);
         return response;
     }
 

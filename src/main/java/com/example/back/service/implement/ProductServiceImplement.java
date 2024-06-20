@@ -69,11 +69,12 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String searchWord, String preSearchWord) {
+    public ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String keyword) {
         List<ProductListViewEntity> productListViewEntities = new ArrayList<>();
 
         try{
-            productListViewEntities = productListViewRepository.findByCategory1ContainingOrCategory2ContainingOrCategory3Containing(searchWord, searchWord, searchWord);
+            productListViewEntities = productListViewRepository.findByCategory1ContainingOrCategory2ContainingOrCategory3Containing(keyword, keyword, keyword);
+            if(productListViewEntities.size() == 0) return SearchProductResponseDto.notExistedProduct();
 
         }catch (Exception exception){
             exception.printStackTrace();
