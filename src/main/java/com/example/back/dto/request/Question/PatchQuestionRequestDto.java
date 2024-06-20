@@ -15,4 +15,10 @@ public class PatchQuestionRequestDto {
     private String title;
     @NotBlank
     private String content;
+    @NotBlank
+    private String userId;
+    @NotBlank
+    private String email;
+    @NotBlank
+    private String type;
 }
