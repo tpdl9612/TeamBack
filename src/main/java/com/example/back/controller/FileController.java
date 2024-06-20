@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/file")
+@CrossOrigin(origins = "http://3.35.30.191:3000")
 @RequiredArgsConstructor
 public class FileController {
 
