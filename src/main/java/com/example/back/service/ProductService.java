@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 public interface ProductService {
     ResponseEntity<? super GetProductResponseDto> getProduct(String productId, String type);
     ResponseEntity<? super GetReviewResponseDto> getReviewList(String productId);
-    ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String searchWord, String preSearchWord);
+    ResponseEntity<? super SearchProductResponseDto> getSearchProductList(String searchWord);
     ResponseEntity<? super PostProductResponseDto> postProduct(PostProductRequestDto dto, String userId);
     ResponseEntity<? super PatchProductResponseDto> patchProduct(PatchProductRequestDto dto, String productId, String userId);
     ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String productId, String userId);

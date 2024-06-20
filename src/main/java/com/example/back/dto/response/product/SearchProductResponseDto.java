@@ -25,4 +25,9 @@ public class SearchProductResponseDto extends ResponseDto {
         SearchProductResponseDto responseBody = new SearchProductResponseDto(productListViewEntities);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
+
+    public static ResponseEntity<ResponseDto> notExistedProduct(){
+        ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_PRODUCT, ResponseMessage.NOT_EXISTED_PRODUCT);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
 }

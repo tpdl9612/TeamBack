@@ -1,5 +1,6 @@
 package com.example.back.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,17 +20,40 @@ import java.util.List;
 public class ProductListViewEntity {
 
     @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "product_id")
     private String productId;
+    @Column(name = "title")
     private String title;
+    @Column(name = "content")
     private String content;
+    @Column(name = "low_price")
     private String lowPrice;
-    private List<String> titleImage;
-    private List<String> secondaryImage;
+
+    @Column(name = "title_image")
+    private String titleImage;
+
+    @Column(name = "secondary_image")
+    private String secondaryImage;
+
+    @Column(name = "category1")
     private String category1;
+    @Column(name = "category2")
     private String category2;
+    @Column(name = "category3")
     private String category3;
+    @Column(name = "user_id")
     private String userId;
+    @Column(name = "write_datetime")
     private String writeDatetime;
 
+    public List<String> getTitleImage() {
+        return List.of(titleImage.split(","));
+    }
+
+    public List<String> getSecondaryImage() {
+        return List.of(secondaryImage.split(","));
+    }
 }

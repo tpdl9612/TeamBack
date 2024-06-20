@@ -19,8 +19,8 @@ public class ProductListItem {
     private String productId;
     private String title;
     private String content;
-    private List<String> titleImage;
-    private List<String> secondaryImage;
+    private List<String> productImageList;
+    private List<String> secondaryProductImageList;
     private String lowPrice;
     private String category1;
     private String category2;
@@ -32,8 +32,8 @@ public class ProductListItem {
         this.productId = productListViewEntity.getProductId();
         this.title = productListViewEntity.getTitle();
         this.content = productListViewEntity.getContent();
-        this.titleImage = productListViewEntity.getTitleImage();
-        this.secondaryImage = productListViewEntity.getSecondaryImage();
+        this.productImageList = productListViewEntity.getTitleImage();
+        this.secondaryProductImageList = productListViewEntity.getSecondaryImage();
         this.lowPrice = productListViewEntity.getLowPrice();
         this.category1 = productListViewEntity.getCategory1();
         this.category2 = productListViewEntity.getCategory2();

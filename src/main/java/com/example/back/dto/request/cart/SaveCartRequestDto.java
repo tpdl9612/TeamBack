@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,13 +15,12 @@ public class SaveCartRequestDto {
 
     private Long productId;
     private String title;
-    private String link;
-    private String image;
+    private List<String> productImageList;
+    private List<String> secondaryProductImageList;
     private String lowPrice;
     private String userId;
     private String category1;
     private String category2;
     private String category3;
-    private String mallName;
     private String count;
 }
