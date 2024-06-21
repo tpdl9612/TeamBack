@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class SaveOrderItemRequestDto {
+    private String productId;
     private String title;
     private List<String> productImageList;
     private String lowPrice;
@@ -15,4 +16,6 @@ public class SaveOrderItemRequestDto {
     private String category2;
     private String category3;
     private String count;
+    private String userId;
+    private String orderDatetime;
 }

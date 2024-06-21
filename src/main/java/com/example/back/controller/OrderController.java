@@ -1,6 +1,7 @@
 package com.example.back.controller;
 
 import com.example.back.dto.request.order.SaveOrderListRequestDto;
+import com.example.back.dto.response.order.DeleteOrderListResponseDto;
 import com.example.back.dto.response.order.GetOrderListResponseDto;
 import com.example.back.dto.response.order.SaveOrderListResponseDto;
 import com.example.back.service.OrderService;
@@ -24,6 +25,12 @@ public class OrderController {
     @GetMapping("/list/{userId}")
     public ResponseEntity<? super GetOrderListResponseDto> getOrderList(@PathVariable String userId) {
         ResponseEntity<? super GetOrderListResponseDto> response = orderService.getOrderListByUserId(userId);
+        return response;
+    }
+
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<? super DeleteOrderListResponseDto> deleteOrderList(@PathVariable String orderId) {
+        ResponseEntity<? super DeleteOrderListResponseDto> response = orderService.deleteOrderList(orderId);
         return response;
     }
 }

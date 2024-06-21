@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -27,6 +28,7 @@ public class PaymentEntity {
     private String customerPhone;
     private String amount;
     private String paymentKey;
+    private Date paymentDatetime;
 
     @ElementCollection
     private List<Long> productIds;

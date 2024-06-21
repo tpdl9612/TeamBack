@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItemEntity, String> {
     List<OrderItemEntity> findByOrderListUserId(String userId);
+    void deleteByOrderListOrderId(String orderId);
 }

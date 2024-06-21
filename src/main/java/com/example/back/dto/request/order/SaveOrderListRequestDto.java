@@ -10,6 +10,7 @@ import java.util.List;
 public class SaveOrderListRequestDto {
     private String orderId;
     private String userId;
+    private String orderDatetime;
     private List<SaveOrderItemRequestDto> items;
 }
 

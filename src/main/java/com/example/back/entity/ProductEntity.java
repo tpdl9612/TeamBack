@@ -31,6 +31,9 @@ public class ProductEntity {
     private String category1;
     private String category2;
     private String category3;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private OrderListEntity orderId;
 
     public ProductEntity(PostProductRequestDto dto, String userId){
         Date now = Date.from(Instant.now());

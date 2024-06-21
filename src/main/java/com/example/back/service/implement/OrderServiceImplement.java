@@ -2,6 +2,7 @@ package com.example.back.service.implement;
 
 import com.example.back.dto.request.order.SaveOrderListRequestDto;
 import com.example.back.dto.response.ResponseDto;
+import com.example.back.dto.response.order.DeleteOrderListResponseDto;
 import com.example.back.dto.response.order.GetOrderListResponseDto;
 import com.example.back.dto.response.order.SaveOrderListResponseDto;
 import com.example.back.entity.OrderItemEntity;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,13 +44,31 @@ public class OrderServiceImplement implements OrderService {
     public ResponseEntity<? super GetOrderListResponseDto> getOrderListByUserId(String userId) {
         List<OrderItemEntity> orderItems = orderItemRepository.findByOrderListUserId(userId);
         try {
-            if (orderItems.isEmpty()) {
-                return GetOrderListResponseDto.emptyList();
-            }
+//            if (orderItems.isEmpty()) {
+//                return GetOrderListResponseDto.emptyList();
+//            }
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
         return GetOrderListResponseDto.success(orderItems);
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteOrderListResponseDto> deleteOrderList(String orderId) {
+        List<OrderListEntity> orderListEntities = new ArrayList<>();
+
+        try {
+            orderListEntities = orderListRepository.findByOrderId(orderId);
+            if (orderListEntities.isEmpty()) {
+                return DeleteOrderListResponseDto.notExistedOrder();
+            }
+            orderItemRepository.deleteByOrderListOrderId(orderId);
+            orderListRepository.deleteByOrderId(orderId);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return DeleteOrderListResponseDto.success();
     }
 }
