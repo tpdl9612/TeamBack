@@ -25,11 +25,10 @@ public class OrderItemEntity {
     @JoinColumn(name = "order_id")
     @JsonIgnore
     private OrderListEntity orderList;
-
     private int id;
     private String productId;
     private String title;
-    private String content;
+    @ElementCollection
     private List<String> productImageList;
     private String lowPrice;
     private String category1;
@@ -40,6 +39,7 @@ public class OrderItemEntity {
 
     public OrderItemEntity(OrderListEntity orderList, SaveOrderItemRequestDto itemDto, String userId) {
         this.orderList = orderList;
+        this.productId = itemDto.getProductId();
         this.title = itemDto.getTitle();
         this.category1 = itemDto.getCategory1();
         this.category2 = itemDto.getCategory2();
@@ -47,5 +47,9 @@ public class OrderItemEntity {
         this.lowPrice = itemDto.getLowPrice();
         this.count = itemDto.getCount();
         this.userId = userId;
+    }
+
+    public String getOrderDatetime() {
+        return orderList.getOrderDatetime();
     }
 }

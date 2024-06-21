@@ -18,6 +18,7 @@ public interface ResponseCode {
 
     String NOT_EXISTED_USER = "NU";
     String NOT_EXISTED_PRODUCT = "NP";
+    String NOT_EXISTED_ORDER = "NO";
 
     String NOT_EXISTED_ANSWER = "NA";
     String NOT_EXISTED_QUESTION = "NQ";

@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,15 +33,23 @@ public class OrderListEntity {
     @Column(name = "item_id")
     private Long itemId;
 
+    @Column(name = "order_datetime")
+    private String orderDatetime;
+
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItemEntity> items;
 
-    public OrderListEntity(SaveOrderListRequestDto dto, String userId) {
+    public OrderListEntity(SaveOrderListRequestDto dto, String userId) throws ParseException {
         this.orderId = dto.getOrderId();
         this.userId = userId;
         this.items = dto.getItems().stream()
                 .map(itemDto -> new OrderItemEntity(this, itemDto, userId))
                 .collect(Collectors.toList());
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        Date paymentDatetime = originalFormat.parse(dto.getOrderDatetime());
+        this.orderDatetime = targetFormat.format(paymentDatetime);
+
     }
 }
 
