@@ -20,10 +20,10 @@ public class AnswerServiceImplement implements AnswerService {
     private final AnswerRepository answerRepository;
 
     @Override
-    public ResponseEntity<? super GetAnswerResponseDto> getAnswer(Long answerId){
+    public ResponseEntity<? super GetAnswerResponseDto> getAnswer(Long questionId){
         AnswerEntity answerEntity = null;
         try{
-            answerEntity = answerRepository.getAnswer(answerId);
+            answerEntity = answerRepository.getAnswer(questionId);
             if(answerEntity == null) return GetAnswerResponseDto.notExistAnswer();
         } catch(Exception exception){
             exception.printStackTrace();

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public interface AnswerService {
-  ResponseEntity<? super GetAnswerResponseDto> getAnswer(Long AnswerId);
+  ResponseEntity<? super GetAnswerResponseDto> getAnswer(Long questionId);
     ResponseEntity<? super PostAnswerResponseDto> postAnswer(PostAnswerRequestDto dto);
     ResponseEntity<? super PatchAnswerResponseDto> patchAnswer(PatchAnswerRequestDto dto, Long answerId);
     ResponseEntity<? super DeleteAnswerResponseDto> deleteAnswer(Long AnswerId);

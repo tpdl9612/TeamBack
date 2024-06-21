@@ -12,13 +12,10 @@ public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
 
     @Query(
             value=
-                    "SELECT " +
-                            "B.answer_number AS answerNumber, " +
-                            "B.title AS title, " +
-                            "B.content AS content " +
-                            "FROM answer_entity AS B " +
-                            "WHERE answer_number = ?1 ",
+                    "SELECT * " +
+                            "FROM question AS B " +
+                            "WHERE question_id = ?1 ",
             nativeQuery = true
     )
-    AnswerEntity getAnswer(Long answerId);
+    AnswerEntity getAnswer(Long questionId);
 }

@@ -10,13 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class GetAnswerResponseDto extends ResponseDto {
     private Long answerId;
     private String content;
     private String userId;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private Long questionId;
 public GetAnswerResponseDto(AnswerEntity answerEntity){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
@@ -24,9 +25,9 @@ public GetAnswerResponseDto(AnswerEntity answerEntity){
     this.content = answerEntity.getContent();
     this.userId = answerEntity.getUserId();
     this.createdAt = answerEntity.getCreatedAt();
-    if(answerEntity.getQuestion() != null){
-        this.questionId = answerEntity.getQuestion().getQuestionId();
-    } else{this.questionId = null;}
+//    if(answerEntity.getQuestion() != null){
+//        this.questionId = answerEntity.getQuestion().getQuestionId();
+//    } else{this.questionId = null;}
 }
 public static ResponseEntity<GetAnswerResponseDto> success(AnswerEntity answerEntity){
     GetAnswerResponseDto responseBody = new GetAnswerResponseDto(answerEntity);

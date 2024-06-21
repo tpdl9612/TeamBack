@@ -16,6 +16,4 @@ public class AnswerRequestDto {
     private String content;
     @NotBlank
     private String userId;
-    @NotBlank
-    private Long questionId;
 }
