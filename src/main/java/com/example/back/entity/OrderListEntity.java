@@ -1,6 +1,7 @@
 package com.example.back.entity;
 
 import com.example.back.dto.request.order.SaveOrderListRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class OrderListEntity {
     private String orderDatetime;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<OrderItemEntity> items;
 
     public OrderListEntity(SaveOrderListRequestDto dto, String userId) throws ParseException {

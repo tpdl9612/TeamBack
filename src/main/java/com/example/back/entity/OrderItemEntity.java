@@ -1,7 +1,7 @@
 package com.example.back.entity;
 
 import com.example.back.dto.request.order.SaveOrderItemRequestDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,8 @@ public class OrderItemEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonManagedReference
     private OrderListEntity orderList;
     private int id;
     private String productId;
@@ -47,9 +48,5 @@ public class OrderItemEntity {
         this.lowPrice = itemDto.getLowPrice();
         this.count = itemDto.getCount();
         this.userId = userId;
-    }
-
-    public String getOrderDatetime() {
-        return orderList.getOrderDatetime();
     }
 }
