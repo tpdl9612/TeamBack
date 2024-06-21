@@ -28,27 +28,27 @@ public class QuestionController {
         return response;
     }
 
-    @GetMapping("/detail/{QuestionId}")
+    @GetMapping("/detail/{questionId}")
     public ResponseEntity<? super GetQuestionResponseDto> getQuestion(
-            @PathVariable("QuestionId") Long QuestionId
-    ){ ResponseEntity<? super GetQuestionResponseDto> response = questionService.getQuestion(QuestionId);
+            @PathVariable("questionId") Long questionId
+    ){ ResponseEntity<? super GetQuestionResponseDto> response = questionService.getQuestion(questionId);
         return response;}
 
-    @PatchMapping("/{QuestionId}")
+    @PatchMapping("/update/{questionId}")
     public ResponseEntity<? super PatchQuestionResponseDto> patchQuestion(
             @RequestBody @Valid PatchQuestionRequestDto requestBody,
-            @PathVariable("QuestionId") Long QuestionId
+            @PathVariable("questionId") Long questionId
     ){
-        ResponseEntity<? super PatchQuestionResponseDto>response = questionService.patchQuestion(requestBody, QuestionId);
+        ResponseEntity<? super PatchQuestionResponseDto>response = questionService.patchQuestion(requestBody, questionId);
         return response;
     }
 
-    @DeleteMapping("/delete/{QuestionId}")
+    @DeleteMapping("/delete/{questionId}")
     public ResponseEntity<? super DeleteQuestionResponseDto> deleteQuestion(
-            @PathVariable("QuestionId") Long QuestionId,
+            @PathVariable("questionId") Long questionId,
             @AuthenticationPrincipal String userId
     ){
-        ResponseEntity<? super DeleteQuestionResponseDto> response = questionService.deleteQuestion(QuestionId);
+        ResponseEntity<? super DeleteQuestionResponseDto> response = questionService.deleteQuestion(questionId);
         return response;
     }
 }

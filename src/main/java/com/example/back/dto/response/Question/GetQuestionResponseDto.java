@@ -22,6 +22,8 @@ public class GetQuestionResponseDto  extends ResponseDto {
     private String title;
     private String content;
     private String userId;
+    private String type;
+    private String email;
     private boolean answered;
     private LocalDate createdAt;
 
@@ -32,6 +34,8 @@ public class GetQuestionResponseDto  extends ResponseDto {
         this.content= questionEntity.getContent();
         this.createdAt=questionEntity.getCreatedAt();
         this.userId= questionEntity.getUserId();
+        this.type= questionEntity.getType();
+        this.email= questionEntity.getEmail();
         this.answered= questionEntity.isAnswered();
     }
     public static ResponseEntity<GetQuestionResponseDto> success(QuestionEntity questionEntity){

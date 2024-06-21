@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 public class QuestionServiceImplement implements QuestionService {
-private QuestionRepository questionRepository;
+private final QuestionRepository questionRepository;
 
     @Override
     public ResponseEntity<? super GetQuestionResponseDto> getQuestion(Long QuestionId){

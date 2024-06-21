@@ -18,4 +18,8 @@ public class QuestionRequestDto {
     private String content;
     @NotBlank
     private String userId;
+    @NotBlank
+    private String email;
+    @NotBlank
+    private String type;
 }

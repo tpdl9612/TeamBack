@@ -1,14 +1,13 @@
 package com.example.back.entity;
 
 import com.example.back.dto.request.cart.SaveCartRequestDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,12 +17,14 @@ import lombok.Setter;
 @Table(name = "cart")
 public class CartEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name = "product_id")
     private Long productId;
     private String userId;
     private String title;
-    private String link;
-    private String image;
+    private List<String> productImageList;
+    private List<String> secondaryProductImageList;
     private String lowPrice;
     private String category1;
     private String category2;
@@ -34,8 +35,8 @@ public class CartEntity {
         this.productId = dto.getProductId();
         this.userId = userId;
         this.title = dto.getTitle();
-        this.link = dto.getLink();
-        this.image = dto.getImage();
+        this.productImageList = dto.getProductImageList();
+        this.secondaryProductImageList = dto.getSecondaryProductImageList();
         this.lowPrice = dto.getLowPrice();
         this.category1 = dto.getCategory1();
         this.category2 = dto.getCategory2();
