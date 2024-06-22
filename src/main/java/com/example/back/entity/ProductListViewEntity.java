@@ -31,13 +31,10 @@ public class ProductListViewEntity {
     private String content;
     @Column(name = "low_price")
     private String lowPrice;
-
     @Column(name = "title_image")
     private String titleImage;
-
     @Column(name = "secondary_image")
     private String secondaryImage;
-
     @Column(name = "category1")
     private String category1;
     @Column(name = "category2")

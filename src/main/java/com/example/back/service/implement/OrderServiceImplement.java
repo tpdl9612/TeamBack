@@ -55,7 +55,6 @@ public class OrderServiceImplement implements OrderService {
     @Override
     public ResponseEntity<? super DeleteOrderListResponseDto> deleteOrderList(String orderId) {
         List<OrderListEntity> orderListEntities = new ArrayList<>();
-
         try {
             orderListEntities = orderListRepository.findByOrderId(orderId);
             if (orderListEntities.isEmpty()) {
