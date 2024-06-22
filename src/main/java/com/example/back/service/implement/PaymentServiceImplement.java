@@ -135,8 +135,12 @@ public class PaymentServiceImplement implements PaymentService {
             paymentRepository.save(paymentEntity);
 
             for (Long productId : productIds) {
-                Optional<CartEntity> productEntityOptional = cartRepository.findById(productId);
-                productEntityOptional.ifPresent(productEntities::add);
+                Optional<CartEntity> productEntityOptional = cartRepository.findByProductId(productId);
+                if (productEntityOptional.isPresent()) {
+                    productEntities.add(productEntityOptional.get());
+                } else {
+                    System.out.println("Product with ID " + productId + " not found.");
+                }
             }
             cartRepository.deleteAll(productEntities);
         } catch (Exception exception) {

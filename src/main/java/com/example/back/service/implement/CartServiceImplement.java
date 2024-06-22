@@ -9,15 +9,14 @@ import com.example.back.entity.CartEntity;
 import com.example.back.repository.CartRepository;
 import com.example.back.repository.UserRepository;
 import com.example.back.service.CartService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +32,9 @@ public class CartServiceImplement implements CartService {
             boolean existedUser = userRepository.existsByUserId(userId);
             if (!existedUser) return SaveCartResponseDto.notExistUser();
 
-            CartEntity entity = cartRepository.findByProductId(dto.getProductId());
-            if(entity != null) {
-                if (entity.getProductId().equals(dto.getProductId())) return SaveCartResponseDto.duplicatedProduct();
+            Optional<CartEntity> existingEntity = cartRepository.findByProductId(dto.getProductId());
+            if (existingEntity.isPresent()) {
+                return SaveCartResponseDto.duplicatedProduct();
             }
             CartEntity cartEntity = new CartEntity(dto, userId);
             cartRepository.save(cartEntity);
@@ -65,45 +64,16 @@ public class CartServiceImplement implements CartService {
     @Override
     public ResponseEntity<? super DeleteCartResponseDto> deleteProduct(Long productId) {
         try {
-            CartEntity cartEntity = cartRepository.findByProductId(productId);
-            if (cartEntity == null) return DeleteCartResponseDto.notExistedProduct();
-
+            Optional<CartEntity> cartEntityOptional = cartRepository.findByProductId(productId);
+            if (cartEntityOptional.isEmpty()) {
+                return DeleteCartResponseDto.notExistedProduct();
+            }
+            CartEntity cartEntity = cartEntityOptional.get();
             cartRepository.delete(cartEntity);
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
         return DeleteCartResponseDto.success();
-    }
-
-
-    private static class NaverResponse {
-        private List<Item> items;
-
-        public List<Item> getItems() {
-            return items;
-        }
-
-        public void setItems(List<Item> items) {
-            this.items = items;
-        }
-    }
-
-    @Getter
-    @Setter
-    private static class Item {
-        private Long productId;
-        private String title;
-        private String link;
-        private String image;
-        private String lprice;
-        private int count;
-        private String category1;
-        private String category2;
-        private String mallName;
-    }
-
-    private String removeHtmlTags(String html) {
-        return html.replaceAll("\\<.*?\\>", "");
     }
 }
