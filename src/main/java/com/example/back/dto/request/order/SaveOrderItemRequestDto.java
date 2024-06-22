@@ -1,5 +1,6 @@
 package com.example.back.dto.request.order;
 
+import jakarta.persistence.ElementCollection;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class SaveOrderItemRequestDto {
     private String productId;
     private String title;
+    @ElementCollection
     private List<String> productImageList;
     private String lowPrice;
     private String category1;
