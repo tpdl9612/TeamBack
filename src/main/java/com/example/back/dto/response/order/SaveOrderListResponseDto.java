@@ -18,9 +18,4 @@ public class SaveOrderListResponseDto extends ResponseDto {
         SaveOrderListResponseDto responseBody = new SaveOrderListResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
-
-    public static ResponseEntity<ResponseDto> duplicatedOrder(){
-        ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_ORDER, ResponseMessage.DUPLICATED_ORDER);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
-    }
 }

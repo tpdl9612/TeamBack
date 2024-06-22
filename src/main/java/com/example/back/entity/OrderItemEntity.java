@@ -23,10 +23,8 @@ public class OrderItemEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-//    @JsonIgnore
     @JsonManagedReference
     private OrderListEntity orderList;
-    private int id;
     private String productId;
     private String title;
     @ElementCollection
@@ -42,6 +40,7 @@ public class OrderItemEntity {
         this.orderList = orderList;
         this.productId = itemDto.getProductId();
         this.title = itemDto.getTitle();
+        this.productImageList = itemDto.getProductImageList();
         this.category1 = itemDto.getCategory1();
         this.category2 = itemDto.getCategory2();
         this.category3 = itemDto.getCategory3();

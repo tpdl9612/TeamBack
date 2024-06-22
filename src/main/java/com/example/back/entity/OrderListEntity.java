@@ -31,9 +31,6 @@ public class OrderListEntity {
     @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "item_id")
-    private Long itemId;
-
     @Column(name = "order_datetime")
     private String orderDatetime;
 

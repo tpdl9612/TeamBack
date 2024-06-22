@@ -28,9 +28,7 @@ public class OrderServiceImplement implements OrderService {
     public ResponseEntity<? super SaveOrderListResponseDto> saveOrderInfo(SaveOrderListRequestDto dto) {
         try {
             OrderListEntity orderListEntity = new OrderListEntity(dto, dto.getUserId());
-            if (orderListRepository.existsByOrderId(orderListEntity.getOrderId())) {
-                return SaveOrderListResponseDto.duplicatedOrder();
-            }
+
             orderListRepository.save(orderListEntity);
 
         } catch (Exception exception) {
