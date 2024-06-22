@@ -13,5 +13,6 @@ import lombok.Setter;
 public class PatchAnswerRequestDto {
     @NotBlank
     private String content;
-
+    @NotBlank
+    private String userId;
 }
