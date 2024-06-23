@@ -24,6 +24,7 @@ public class PaymentEntity {
     private String customerId;
     private String customerName;
     private String customerEmail;
+    private String customerPostcode;
     private String customerAddress;
     private String customerPhone;
     private String amount;

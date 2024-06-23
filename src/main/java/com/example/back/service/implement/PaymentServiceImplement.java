@@ -1,11 +1,11 @@
 package com.example.back.service.implement;
 
 import com.example.back.dto.response.ResponseDto;
+import com.example.back.dto.response.payment.GetPaymentResponseDto;
 import com.example.back.dto.response.payment.PaymentResponseDto;
 import com.example.back.entity.CartEntity;
 import com.example.back.entity.PaymentEntity;
 import com.example.back.repository.CartRepository;
-import com.example.back.repository.OrderListRepository;
 import com.example.back.repository.PaymentRepository;
 import com.example.back.service.PaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,7 +39,6 @@ public class PaymentServiceImplement implements PaymentService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final PaymentRepository paymentRepository;
     private final CartRepository cartRepository;
-    private final OrderListRepository orderListRepository;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -102,6 +101,7 @@ public class PaymentServiceImplement implements PaymentService {
         String customerName = ((String) paymentInfo.get("customerName")).trim();
         String customerEmail = ((String) paymentInfo.get("customerEmail")).trim();
         String customerPhone = ((String) paymentInfo.get("customerPhone")).trim();
+        String customerPostcode = ((String) paymentInfo.get("customerPostcode")).trim();
         String customerAddress = ((String) paymentInfo.get("customerAddress")).trim();
         String amountStr = ((String) paymentInfo.get("amount")).trim();
         String paymentKey = ((String) paymentInfo.get("paymentKey")).trim();
@@ -126,6 +126,7 @@ public class PaymentServiceImplement implements PaymentService {
             paymentEntity.setCustomerId(customerId);
             paymentEntity.setCustomerName(customerName);
             paymentEntity.setCustomerEmail(customerEmail);
+            paymentEntity.setCustomerPostcode(customerPostcode);
             paymentEntity.setCustomerAddress(customerAddress);
             paymentEntity.setCustomerPhone(customerPhone);
             paymentEntity.setProductIds(productIds);
@@ -148,5 +149,19 @@ public class PaymentServiceImplement implements PaymentService {
             return ResponseDto.databaseError();
         }
         return PaymentResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super GetPaymentResponseDto> getPaymentInfo(String orderId) {
+        PaymentEntity paymentEntity = new PaymentEntity();
+        try {
+            paymentEntity = paymentRepository.findByOrderId(orderId);
+            if (paymentEntity == null) return GetPaymentResponseDto.notExistPayment();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetPaymentResponseDto.success(paymentEntity);
     }
 }
