@@ -1,8 +1,9 @@
 package com.example.back.controller;
 
 import com.example.back.dto.request.order.SaveOrderListRequestDto;
-import com.example.back.dto.response.payment.PaymentResponseDto;
 import com.example.back.dto.response.order.SaveOrderListResponseDto;
+import com.example.back.dto.response.payment.GetPaymentResponseDto;
+import com.example.back.dto.response.payment.PaymentResponseDto;
 import com.example.back.service.OrderService;
 import com.example.back.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,6 +63,12 @@ public class PaymentController {
     @PostMapping("/saveOrderInfo")
     public ResponseEntity<? super SaveOrderListResponseDto> saveOrderInfo(@RequestBody SaveOrderListRequestDto requestBody) {
         ResponseEntity<? super SaveOrderListResponseDto> response = orderService.saveOrderInfo(requestBody);
+        return response;
+    }
+
+    @GetMapping("/getPaymentInfo/{orderId}")
+    public ResponseEntity<? super GetPaymentResponseDto> getPaymentInfo(@PathVariable String orderId) {
+        ResponseEntity<? super GetPaymentResponseDto> response = paymentService.getPaymentInfo(orderId);
         return response;
     }
 }

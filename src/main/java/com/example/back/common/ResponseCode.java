@@ -22,6 +22,7 @@ public interface ResponseCode {
 
     String NOT_EXISTED_ANSWER = "NA";
     String NOT_EXISTED_QUESTION = "NQ";
+    String NOT_EXISTED_PAYMENT = "NP";
 
     String WRONG_PASSWORD = "WP";
     String DO_NOT_HAVE_PERMISSION = "NP";
