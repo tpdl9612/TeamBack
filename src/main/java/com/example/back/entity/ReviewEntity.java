@@ -45,9 +45,10 @@ public class ReviewEntity {
         this.writeDatetime = getCurrentFormattedDateTime();
     }
 
-    public ReviewEntity(PostReviewRequestDto dto){
+    public ReviewEntity(PostReviewRequestDto dto, String userId, ProductEntity product){
+        this.product = product;
         this.content = dto.getContent();
-        this.userId = dto.getUserId();
+        this.userId = userId;
         this.writeDatetime = getCurrentFormattedDateTime();
     }
 

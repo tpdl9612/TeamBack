@@ -10,7 +10,9 @@ import lombok.Setter;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,6 +36,9 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private OrderListEntity orderId;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     public ProductEntity(PostProductRequestDto dto, String userId){
         Date now = Date.from(Instant.now());

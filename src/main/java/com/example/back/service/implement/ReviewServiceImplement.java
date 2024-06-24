@@ -39,7 +39,7 @@ public class ReviewServiceImplement implements ReviewService {
     }
 
     @Override
-    public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String userId) {
+    public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String userId, String productId) {
         try{
             boolean existedUserId = userRepository.existsByUserId(userId);
             if (!existedUserId) return PostReviewResponseDto.notExistUser();
@@ -47,8 +47,8 @@ public class ReviewServiceImplement implements ReviewService {
 //            ProductEntity product = productRepository.findByProductId(dto.getProductId());
 //            if (product == null) return PostReviewResponseDto.notExistProduct();
 
-            ReviewEntity reviewEntity = new ReviewEntity(dto);
             ProductEntity product = productRepository.findById(dto.getProductId()).get();
+            ReviewEntity reviewEntity = new ReviewEntity(dto, userId, product);
             reviewEntity.setProduct(product);
             reviewEntity.setUserId(userId);
             reviewRepository.save(reviewEntity);
@@ -58,9 +58,6 @@ public class ReviewServiceImplement implements ReviewService {
         }
         return PostReviewResponseDto.success();
     }
-
-
-
 
     @Override
     public ResponseEntity<? super GetAllReviewResponseDto> getAllReviews(String productId) {

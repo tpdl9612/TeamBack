@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/product/review")
+@RequestMapping("/api/v1/product")
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("")
+    @PostMapping("/review")
     public ResponseEntity<? super PostReviewResponseDto> postReview(
             @RequestBody @Valid PostReviewRequestDto requestBody,
-            @AuthenticationPrincipal String userId
+            @AuthenticationPrincipal String userId,
+            @RequestParam("productId") String productId
     ) {
-        ResponseEntity<? super PostReviewResponseDto> response = reviewService.postReview(requestBody, userId);
+        ResponseEntity<? super PostReviewResponseDto> response = reviewService.postReview(requestBody, userId, productId);
         return response;
     }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ReviewService {
     ResponseEntity<? super GetReviewResponseDto> getReview(Long reviewId);
-    ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String userId);
+    ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String userId, String productId);
     ResponseEntity<? super GetAllReviewResponseDto> getAllReviews(String productId);
 
 //    ResponseEntity<? super PatchReviewResponseDto> patchAnswer(PatchReviewRequestDto dto, Long reviewId);
