@@ -20,6 +20,7 @@ public interface ResponseMessage {
     String NOT_EXISTED_ORDER = "Not Existed Order";
     String NOT_EXISTED_ANSWER = "Not Existed Answer";
     String NOT_EXISTED_QUESTION = "Not Existed Question";
+    String NOT_EXISTED_REVIEW = "Not Existed Review";
     String NOT_EXISTED_PAYMENT = "Not Existed Payment";
     String WRONG_PASSWORD = "Wrong Password";
     String DO_NOT_HAVE_PERMISSION = "Do Not Have Permission";

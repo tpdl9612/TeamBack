@@ -2,7 +2,6 @@ package com.example.back.controller;
 
 import com.example.back.dto.request.product.PatchProductRequestDto;
 import com.example.back.dto.request.product.PostProductRequestDto;
-import com.example.back.dto.request.product.PostReviewRequestDto;
 import com.example.back.dto.response.product.*;
 import com.example.back.service.ProductService;
 import jakarta.validation.Valid;
@@ -25,24 +24,6 @@ public class ProductController {
     ) {
         ResponseEntity<? super PostProductResponseDto> response = productService.postProduct(requestBody, userId);
         return response;
-    }
-
-    @PostMapping("/{productId}/review")
-    public ResponseEntity<? super PostReviewResponseDto> postReview(
-            @RequestBody @Valid PostReviewRequestDto requestBody,
-            @PathVariable("productId") String productId,
-            @AuthenticationPrincipal String userId
-    ) {
-        ResponseEntity<? super PostReviewResponseDto> response = productService.postReview(requestBody, productId, userId);
-        return response;
-    }
-
-    @GetMapping("/{productId}/review-list")
-    public ResponseEntity<? super GetReviewResponseDto> getCommentList(
-            @PathVariable("productId") String produtId
-    ) {
-        ResponseEntity<? super GetReviewResponseDto> reponse = productService.getReviewList(produtId);
-        return reponse;
     }
 
     @GetMapping(value = {"/search"})

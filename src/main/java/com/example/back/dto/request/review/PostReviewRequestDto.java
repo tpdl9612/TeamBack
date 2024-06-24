@@ -1,6 +1,7 @@
-package com.example.back.dto.request.product;
+package com.example.back.dto.request.review;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PostReviewRequestDto {
-
     @NotBlank
-    private String review;
+    private String content;
+    @NotBlank
+    private String userId;
+    @NotNull
+    private String productId;
 }

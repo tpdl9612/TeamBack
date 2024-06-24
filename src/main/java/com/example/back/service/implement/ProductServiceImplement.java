@@ -2,16 +2,13 @@ package com.example.back.service.implement;
 
 import com.example.back.dto.request.product.PatchProductRequestDto;
 import com.example.back.dto.request.product.PostProductRequestDto;
-import com.example.back.dto.request.product.PostReviewRequestDto;
 import com.example.back.dto.response.ResponseDto;
 import com.example.back.dto.response.product.*;
 import com.example.back.entity.ImageEntity;
 import com.example.back.entity.ProductEntity;
 import com.example.back.entity.ProductListViewEntity;
-import com.example.back.entity.ReviewEntity;
 import com.example.back.repository.*;
 import com.example.back.repository.resultSet.GetProductResultSet;
-import com.example.back.repository.resultSet.GetReviewListResultSet;
 import com.example.back.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +24,7 @@ public class ProductServiceImplement implements ProductService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final ProductListViewRepository productListViewRepository;
-    private final ReviewRepository reviewRepository;
+//    private final ReviewRepository reviewRepository;
     private final ImageRepository imageRepository;
 
     @Override
@@ -48,24 +45,6 @@ public class ProductServiceImplement implements ProductService {
             return ResponseDto.databaseError();
         }
         return GetProductResponseDto.success(resultSet, primaryImages, secondaryImages);
-    }
-
-    @Override
-    public ResponseEntity<? super GetReviewResponseDto> getReviewList(String productId) {
-
-        List<GetReviewListResultSet> resultSets = new ArrayList<>();
-
-        try {
-            boolean existedProduct = productRepository.existsByProductId(productId);
-            if (!existedProduct) return GetReviewResponseDto.notExistProduct();
-
-            resultSets = reviewRepository.getReviewList(productId);
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return ResponseDto.databaseError();
-        }
-        return GetReviewResponseDto.success(resultSets);
     }
 
     @Override
@@ -162,27 +141,6 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, String productId, String userId) {
-        try {
-            ProductEntity productEntity = productRepository.findByProductId(productId);
-            if (productEntity == null) return PostReviewResponseDto.notExistProduct();
-
-            boolean existUser = userRepository.existsByUserId(userId);
-            if (!existUser) return PostReviewResponseDto.notExistUser();
-
-            ReviewEntity reviewEntity = new ReviewEntity(dto, productId, userId);
-            reviewRepository.save(reviewEntity);
-
-            productRepository.save(productEntity);
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return ResponseDto.databaseError();
-        }
-        return PostReviewResponseDto.success();
-    }
-
-    @Override
     public ResponseEntity<? super DeleteProductResponseDto> deleteProduct(String productId, String userId) {
         try{
 
@@ -197,7 +155,7 @@ public class ProductServiceImplement implements ProductService {
             if(!isWriter) return DeleteProductResponseDto.notPermission();
 
             imageRepository.deleteByProductId(productId);
-            reviewRepository.deleteByProductId(productId);
+//            reviewRepository.deleteByProductId(productId);
             productRepository.delete(productEntity);
 
         }catch (Exception exception){
