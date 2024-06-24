@@ -18,7 +18,7 @@ public class GetAnswerResponseDto extends ResponseDto {
     private String content;
     private String userId;
     private LocalDateTime createdAt;
-    private Long questionId;
+//    private Long questionId;
 public GetAnswerResponseDto(AnswerEntity answerEntity){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     this.answerId = answerEntity.getAnswerId();

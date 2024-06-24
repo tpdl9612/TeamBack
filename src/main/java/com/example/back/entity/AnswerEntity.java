@@ -5,6 +5,7 @@ import com.example.back.dto.request.Answer.AnswerRequestDto;
 import com.example.back.dto.request.Answer.PatchAnswerRequestDto;
 import com.example.back.dto.request.Answer.PostAnswerRequestDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,13 +24,13 @@ public class AnswerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
-    @Column(nullable=false)
+    @NotNull
     private String content;
 
-    @Column(nullable=false)
+    @NotNull
     private String userId;
 
-    @Column(nullable=false)
+    @NotNull
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -43,13 +44,12 @@ public class AnswerEntity {
     public AnswerEntity(AnswerRequestDto dto, String userId, QuestionEntity question){
         this.content = dto.getContent();
         this.userId = userId;
-//        this.question = question;
+        this.question = question;
         this.createdAt = LocalDateTime.now();
     }
     public AnswerEntity(PostAnswerRequestDto dto){
         this.content = dto.getContent();
         this.userId = dto.getUserId();
-//        this.question = question;
         this.createdAt = LocalDateTime.now();
     }
     public void patchAnswer(PatchAnswerRequestDto dto){

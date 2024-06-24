@@ -19,6 +19,7 @@ public class AnswerController {
 
     @PostMapping("")
     public ResponseEntity<? super PostAnswerResponseDto> postAnswer(@RequestBody @Valid PostAnswerRequestDto requestBody){
+        System.out.println(requestBody);
         ResponseEntity<? super PostAnswerResponseDto> response = answerService.postAnswer(requestBody);
         return  response;
     }
